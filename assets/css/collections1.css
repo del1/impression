@@ -1,0 +1,509 @@
+/*Collections Section Start*/ 
+#collections{
+	background-color:#ffffff;
+}
+#collections h1{
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    line-height: 36px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #666666;
+    text-transform: uppercase;
+}
+#collections input {
+    width: 281px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    font-size: 13px;
+    background-color: white;
+    //background-image: url(../image/searchicon.png);
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    font-family: 'Lato', sans-serif;
+    line-height: 35px;
+    text-indent: 36px;
+    float: right;
+}
+#collections .year-category.btn-select.btn-default, #collections .year-category.btn-select.btn-default,
+#collections .year-category.btn-select.btn-default:hover, #collections .year-category.btn-select.btn-default.active {
+    background-color: #fcfbf7;
+}
+#collections .year-category.btn-select.btn-default ul {
+    background-color: #fcfbf7;
+}
+#collections .container.container-padding{
+	background-color:#fcfbf7;
+	border:1px solid #e6d6b4;
+	padding: 20px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+}
+.category-dropdown li:hover {
+    background-color: #f4f5f7;
+}
+#collections .btn.active, #collections .btn:active, #collections .btn.focus, #collections .btn:focus {
+    box-shadow: none;
+}
+#collections .searchMenus h6 {
+    margin: 0 0 10px 0;
+    font-size: 15px;
+}
+#collections .searchMenus select{
+    width: 100%;
+    border: 1px solid #e6d6b4 !important;
+    webkit-border: 1px solid #e6d6b4;
+    moz-border: 1px solid #e6d6b4;
+    line-height: 40px;
+    height: 40px;
+    font-family: 'Lato', sans-serif;
+    font-size: 13px;
+    color:#666666;
+    font-weight: 400;
+    text-indent: 10px;
+}
+#collections .collectionBox {
+    display: block;
+    margin-bottom: 50px;
+}
+#collections .collectionBox:hover {
+    text-decoration: none;
+    opacity: 0.8;
+}
+
+
+
+#collections .collectionBox h2{
+    font-family: 'Lato', sans-serif;
+    font-size: 18px;
+    line-height: 18px;
+    margin: 0;
+    padding: 0 0 15px 0;
+    font-weight: 400;
+    color: #333333;
+    text-align: center;
+    text-transform: uppercase;
+}
+#collections .collectionBox p{
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    line-height: 15px;
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
+    color: #d4bc89;
+    text-align: center;
+    text-transform: uppercase;
+}
+#collections .collectionBox .contentBox{
+	padding: 25px 0 0 0;
+}
+@media only screen and (max-width: 760px){
+	#collections input {
+	    float: none;
+	    margin: 20px 0 0 0;
+	}
+	#collections .searchMenus {
+	    padding: 20px 20px 0 20px;
+	}
+	#collections .searchMenus select {
+	    margin-bottom: 20px;
+	}
+	#collections .collectionBox img{
+		display: block;
+		margin:0 auto;
+	}
+    #collections {
+        padding:0;
+    }
+}
+@media only screen and (max-width: 470px){
+	#collections input {
+	    width: 100%;
+	}
+}
+/*Collections Section End*/
+
+
+
+
+
+/**/ 
+.chooseCollections h1{
+
+}
+.chooseCollections h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    line-height: 15px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #666666;
+    text-transform: uppercase;
+}
+.ui-checkbox {
+    display: none;
+}
+
+.ui-checkbox + label {
+  position: relative;
+  padding-left: 25px;
+  display: inline-block;
+  font-size: 12px;
+}
+ 
+.ui-checkbox + label:before {
+    background-color: #fff;
+    border: 1px solid #30b0d7;    
+    padding: 9px;
+    border-radius: 3px;
+    display: block;
+    position: absolute;
+    top: 0;
+    left:0;
+    content: "";
+}
+ 
+
+ 
+.ui-checkbox:checked + label:before {
+    border: 1px solid #30b0d7;    
+    color: #99a1a7;
+}
+
+.ui-checkbox.no-border:checked + label:before {
+    border-color: transparent;
+}
+
+
+ 
+.ui-checkbox:checked + label:after {
+    content: '\2714';
+    font-size: 14px;
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    color: #30b0d7;
+}
+ 
+.ui-checkbox.green-tick:checked + label:after {
+    color: #8cc63f;
+}
+
+/**/ 
+
+
+#collections .btn-select {
+    position: relative;
+    padding: 0;
+    min-width: 236px;
+    width: 100%;
+    border-radius: 0;
+    margin-bottom: 0;
+    border-color: #e6d6b4;
+}
+
+#collections .btn-select .btn-select-value {
+    padding: 6px 12px;
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 34px;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-left: none !important;
+}
+
+#collections .btn-select .btn-select-arrow {
+    float: right;
+    line-height: 20px;
+    padding: 6px 10px;
+    top: 0;
+}
+
+#collections .btn-select ul {
+    display: none;
+    background-color: white;
+    color: black;
+    clear: both;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: #fff3da solid 1px;
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    top: 33px;
+    z-index: 999;
+    border: 1px solid #e6d6b4;
+}
+
+#collections .btn-select ul li {
+    padding: 3px 14px;
+    text-align: left;
+    line-height: 30px;
+}
+
+#collections .btn-select ul li:hover {
+    background-color: #f4f4f4;
+}
+
+#collections .btn-select ul li.selected {
+    // color: white;
+}
+
+/* Default Start */
+#collections .btn-select.btn-default:hover, #collections .btn-select.btn-default:active,#collections  .btn-select.btn-default.active {
+    // border-color: #ccc;
+}
+.collectionItems h3 {
+    color: #999;
+    text-align: center;
+    margin: 30px 0;
+    font-size: 21px;
+}
+.btn.btn-default.btn-reset {
+    background: transparent;
+    border-radius: 0;
+    color: #333;
+    background-color: #fcfbf7;
+    border: 1px solid #e6d6b4;
+}
+.btn.btn-default.btn-reset:hover {
+    background-color: #d8c395;
+    color: #ffffff;
+    border: 1px solid #d8c395;
+}
+#collections .btn-select.btn-default ul li.selected {
+    background-color: #f4f5f7;
+}
+
+#collections .btn-select.btn-default ul,#collections  .btn-select.btn-default .btn-select-value {
+    // background-color: white;
+    // border: #ccc 1px solid;
+}
+
+#collections .btn-select.btn-default:hover,#collections  .btn-select.btn-default.active {
+    background-color: #ffffff;
+}
+
+.searchMenus .btn.active, .searchMenus .btn:active {
+    background-image: none;
+    outline: 0;
+   -webkit-box-shadow: inset 0 0 0 rgba(0,0,0,0);
+    box-shadow: inset 0 0 rgba(0,0,0,0);
+}
+/* Default End */
+
+/* Primary Start */
+.btn-select.btn-primary:hover, .btn-select.btn-primary:active, .btn-select.btn-primary.active {
+    border-color: #286090;
+}
+
+.btn-select.btn-primary ul li.selected {
+    background-color: #2e6da4;
+    color: white;
+}
+
+.btn-select.btn-primary ul {
+    border: #2e6da4 1px solid;
+}
+
+.btn-select.btn-primary .btn-select-value {
+    background-color: #428bca;
+    border: #2e6da4 1px solid;
+}
+
+.btn-select.btn-primary:hover, .btn-select.btn-primary.active {
+    background-color: #286090;
+}
+/* Primary End */
+
+/* Success Start */
+.btn-select.btn-success:hover, .btn-select.btn-success:active, .btn-select.btn-success.active {
+    border-color: #4cae4c;
+}
+
+.btn-select.btn-success ul li.selected {
+    background-color: #4cae4c;
+    color: white;
+}
+
+.btn-select.btn-success ul {
+    border: #4cae4c 1px solid;
+}
+
+.btn-select.btn-success .btn-select-value {
+    background-color: #5cb85c;
+    border: #4cae4c 1px solid;
+}
+
+.btn-select.btn-success:hover, .btn-select.btn-success.active {
+    background-color: #449d44;
+}
+/* Success End */
+
+/* info Start */
+.btn-select.btn-info:hover, .btn-select.btn-info:active, .btn-select.btn-info.active {
+    border-color: #46b8da;
+}
+
+.btn-select.btn-info ul li.selected {
+    background-color: #46b8da;
+    color: white;
+}
+
+.btn-select.btn-info ul {
+    border: #46b8da 1px solid;
+}
+
+.btn-select.btn-info .btn-select-value {
+    background-color: #5bc0de;
+    border: #46b8da 1px solid;
+}
+
+.btn-select.btn-info:hover, .btn-select.btn-info.active {
+    background-color: #269abc;
+}
+/* info End */
+
+/* warning Start */
+.btn-select.btn-warning:hover, .btn-select.btn-warning:active, .btn-select.btn-warning.active {
+    border-color: #eea236;
+}
+
+.btn-select.btn-warning ul li.selected {
+    background-color: #eea236;
+    color: white;
+}
+
+.btn-select.btn-warning ul {
+    border: #eea236 1px solid;
+}
+
+.btn-select.btn-warning .btn-select-value {
+    background-color: #f0ad4e;
+    border: #eea236 1px solid;
+}
+
+.btn-select.btn-warning:hover, .btn-select.btn-warning.active {
+    background-color: #d58512;
+}
+/* warning End */
+
+/* danger Start */
+.btn-select.btn-danger:hover, .btn-select.btn-danger:active, .btn-select.btn-danger.active {
+    border-color: #d43f3a;
+}
+
+.btn-select.btn-danger ul li.selected {
+    background-color: #d43f3a;
+    color: white;
+}
+
+.btn-select.btn-danger ul {
+    border: #d43f3a 1px solid;
+}
+
+.btn-select.btn-danger .btn-select-value {
+    background-color: #d9534f;
+    border: #d43f3a 1px solid;
+}
+
+.btn-select.btn-danger:hover, .btn-select.btn-danger.active {
+    background-color: #c9302c;
+}
+/* danger End */
+
+.btn-select.btn-select-light .btn-select-value {
+    background-color: white;
+    color: black;
+}
+.glyphicon-chevron-down:before {
+    content: "\e114";
+    font-size: 10px !important;
+}
+.mobileView{
+        display: none;
+    }
+@media only screen and (max-width: 760px){
+    #collections .btn-select {
+        margin-bottom: 20px;
+    }
+    .desktopView{
+        display: none;
+    }
+    .mobileView{
+        display: block;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+/*mobile view section Start*/
+.bottomBtns{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+.mobileView .row{
+    margin:0;
+}
+.mobileView .bottomBtns .col-xs-6{
+    padding:0;
+}  
+.mobileView .bottomBtns .left{
+    background-color:#111111;
+    border:2px solid #d4bc89;
+}
+.mobileView .bottomBtns .right{
+    background-color:#d4bc89;
+}
+.mobileView .bottomBtns a{
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #ffffff;
+    text-align:center;
+    display:block;
+    text-transform: uppercase;
+}
+.mobileView .bottomBtns a:hover{
+    color: #ffffff;
+    text-decoration: none;
+}
+.mobileView .bottomBtns .left {
+    line-height: 36px;
+}
+/*mobile view section End*/
+.mobileView .headView{
+    background-color:#181818;
+}
+.mobileView .headView h2{
+    font-family: 'Lato', sans-serif;
+    font-size: 14px;
+    line-height: 40px;
+    margin: 0;
+    padding: 0;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: left;
+    display: block;
+    text-transform: uppercase;
+}

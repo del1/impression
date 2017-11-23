@@ -1,0 +1,69 @@
+.contactus {
+    padding: 80px 0;
+}
+.contactus .form {
+    background-color: #efe6cd;
+    padding: 90px 50px;
+}
+.contactus h5 {
+    font-size: 30px;
+    color: #333333;
+    margin: 0 0 20px 0;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+.contactus input, .contactus select {
+    height: 45px;
+    width: 100%;
+    padding: 0 10px;
+    margin: 0 0 15px 0;
+}
+.contactus textarea {
+    height: 80px;
+    margin: 0 0 15px 0;
+}
+.contactus .radio-box {
+    margin: 5px 0 18px 0;
+}
+.contactus .radio-box h4 {
+    margin: 0;
+    font-size: 16px;
+    color: #666666;
+    font-weight: 600;
+    display: inline-block;
+    margin-right: 15px;
+    text-transform: uppercase;
+}
+.contactus .radio-box .radio-inline {
+    padding-left: 30px;
+    font-size: 16px;
+}
+.contactus .radio-box input {
+    height: 20px;
+    width: 20px;
+    margin: 3px 0 0 -23px;
+}
+.contactus .require {
+    position: absolute;
+    top: -5px;
+    right: 0;
+    color: #333333;
+    font-size: 26px;
+    font-weight: 600;
+}
+
+/*about details section End*/ 
+@media only screen and (max-width: 1260px){
+
+}
+@media only screen and (max-width: 1020px){
+    .contactus .form {
+        padding: 50px;
+        margin-bottom: 50px;
+    }
+}
+@media only screen and (max-width: 760px){
+    .contactus .form {
+        padding: 25px;
+    }
+}

@@ -1,0 +1,265 @@
+#contactDetails{
+    background-color:#ffffff;
+    padding:0 0 150px 0;
+}
+#contactDetails .outDate h1{
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+    margin: 60px 0 0 0;
+    padding: 0;
+    font-weight: 700;
+    color: #666666;
+    text-transform: uppercase;
+    position: relative;
+    width: 102px;
+}
+#contactDetails  h2{
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+    width:78px;
+    margin: 60px 0 0 0;
+    padding: 0;
+    font-weight: 700;
+    color: #ffffff;
+    background-color:#d4bc89;
+    text-align: center;
+    text-transform: uppercase;
+}
+#contactDetails  h3{
+    font-family: 'Karla', sans-serif;
+    font-size: 15px;
+    line-height: 15px;
+    margin: 0;
+    padding: 0;
+    font-weight: 700;
+    color: #444444;
+    text-transform: uppercase;
+}
+#contactDetails p{
+    font-family: 'Karla', sans-serif;
+    font-size: 16px;
+    line-height: 28px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #666666;
+}
+.name-location {
+    padding: 20px 0 0 0;
+}
+.name-location a {
+    color: #f7584e;
+    text-decoration: none;
+    padding-left: 3px;
+    font-size: 16px;
+    margin: -3px 3px 0 -5px;
+    float: left;
+}
+.name-location h3 {
+    float: left;
+}
+.name-location a:hover {
+    color: #c51a0f;
+}
+#contactDetails .line{
+    position: relative;
+}
+#contactDetails .line::after {
+    content: "";
+    position: relative;
+    width: 225px;
+    height: 2px;
+    bottom: 14px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 1px dashed #d4bc89;
+    z-index: 2;
+    left: 72px;
+}
+#contactDetails b{
+    width: 22px;
+    height: 22px;
+    background-color: #ffffff;
+    border: 4px solid #d4bc89;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    top: 5px;
+    left: 8px;
+    float: right;
+    z-index: 1024;
+}
+#contactDetails .hr ,#contactDetails .vr{
+    position:relative;
+}
+#contactDetails .hr::after {
+    content: "";
+    position: relative;
+    width: 100px;
+    height: 2px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 1px dashed #d4bc89;
+    z-index: 2;
+    left: 16px;
+    top: 6px;
+}
+#contactDetails .hr::before{
+    content: "";
+    position: relative;
+    width: 246px;
+    height: 2px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 1px dashed #d4bc89;
+    z-index: 2;
+    left: -116px;
+    top: 141px;
+    transform: rotate(90deg);
+}
+
+/*about details section Start */
+#contactDetails .detailLinks{
+    margin: 0 0 25px 0;
+}
+#contactDetails .detailLinks a {
+    font-family: 'Karla', sans-serif;
+    font-size: 15px;
+    line-height: 13px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #000000;
+    text-transform: uppercase;
+}
+#contactDetails .detailLinks .active-menu {
+    color: #ae9e9e;
+    pointer-events: none;
+}
+#contactDetails .detailLinks h6{
+    font-family: 'Karla', sans-serif;
+    font-size: 18px;
+    line-height: 26px;
+    margin: 0;
+    padding:40px 0 0 0;
+    font-weight: 700;
+    color: #333333;
+    text-transform: uppercase;
+    position: relative;
+}
+#contactDetails .detailLinks h6::before {
+    content: "";
+    position: relative;
+    width: 84px;
+    height: 2px;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+    border: 1px dashed #d4bc89;
+    z-index: 2;
+    left:-374px;
+    top: 75px;
+    transform: rotate(90deg);
+}
+#contactDetails .webLinks a {
+    font-family: 'Karla', sans-serif;
+    font-size: 14px;
+    line-height: 13px;
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    color: #666666;
+}
+#contactDetails .webLinks a:hover {
+    color: #000;
+}
+.page-title h5{
+  font-size: 24px;
+  text-transform: uppercase;
+}
+/*about details section End*/
+@media only screen and (max-width: 1260px){
+    #contactDetails .detailLinks h6::before {
+        left: -371px;
+    }
+    #contactDetails .hr::after {
+        width: 55px;
+    }
+    #contactDetails .line::after {
+        width: 175px;
+    }
+    .name-location a, .name-location h3 {
+        float: none;
+    }
+}
+@media only screen and (max-width: 1020px){
+    #contactDetails .line::after {
+        width: 128px;
+    }
+    #contactDetails .detailLinks h6::before {
+        left: -261px;
+    }
+    #contactDetails .hr::after {
+        width: 20px;
+    }
+    #contactDetails p {
+        font-size: 13px;
+    }
+    #contactDetails .webLinks a {
+        font-size: 13px;
+    }
+}
+@media only screen and (max-width: 760px){
+    #contactDetails .outDate h1 {
+        width: 100%;
+        text-align: center;
+    }
+    #contactDetails .line::after,#contactDetails .hr::after  {
+        display: none;
+    }
+    #contactDetails b {
+        left: inherit;
+        float: none;
+        display: block;
+        margin: 0 auto;
+    }
+    #contactDetails h2 {
+        margin: 60px auto 0 auto;
+    }
+    #contactDetails h3,#contactDetails p {
+        text-align: center;
+    }
+    #contactDetails h3{
+        padding: 10px 0;
+    }
+    #contactDetails .hr::before {
+        left: -23px;
+        top: 43px;
+        width: 60px;
+        transform: rotate(90deg);
+    }
+    #contactDetails {
+        padding: 50px 0 50px 0;
+    }
+    #contactDetails .detailLinks h6 {
+        font-size: 19px;
+        padding: 30px 0 0 0;
+    }
+    #contactDetails p {
+        font-size: 15px;
+    }
+    #contactDetails .webLinks a {
+        font-size: 15px;
+        display: block;
+        text-align: center;
+        padding: 10px 0 0 0;
+    }
+    .name-location {
+        text-align: center;
+    }
+}

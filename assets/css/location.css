@@ -1,0 +1,111 @@
+.locations {
+    padding: 100px 0;
+}
+.locations h3.page-title {
+    margin-bottom: 20px;
+}
+.locations .blocks {
+    margin: 20px 0 0 0;
+    padding-right: 30px;
+}
+.locations h5 {
+    color: #666666;
+    font-size: 16px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+.locations p {
+    font-size: 16px;
+    margin-bottom: 0;
+}
+h6.tour-title {
+    font-size: 16px;
+    color: #666666;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+.locations .social-icon {
+    width: 100%;
+    border-top: #efe6cd solid 1px;
+    padding-top: 12px;
+    margin-top: 15px;
+}
+.locations .social-icon a {
+    font-size: 18px;
+    color: #a0755d;
+}
+.locations .social-icon a:hover {
+    color: #80563f;
+}
+.google-virtual-tour {
+    height: 310px;
+    width: 100%;
+    background-color: #333;
+}
+.google-virtual-tour iframe {
+    height: 100%;
+    width: 100%;
+    border:0;
+}
+.google-map {
+    height: 310px;
+    width: 100%;
+    background-color: #ccc;
+    margin-top: 20px;
+}
+.google-map iframe {
+    height: 100%;
+    width: 100%;
+    border:1px solid #e1e1e1;
+}
+.event-trunkshow.locations .event-title {
+    width: 22.444%;
+}
+.event-trunkshow.locations .location-list {
+    padding: 50px 0 0 0;
+}
+.locations .quote {
+    position: relative;
+    padding: 60px 0 25px 0;
+}
+.locations .quote::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-color: #f7f2e6;
+}
+.locations .quote .quote-text {
+    margin: 0 0 15px 0;
+}
+.locations .quote-text-2 {
+    font-size: 30px;
+    color: #a0755d;
+    line-height: 36px;
+    letter-spacing: 0;
+    font-family: 'geosanslightregular';
+}
+
+/*about details section End*/ 
+@media only screen and (max-width: 1260px){
+    .event-trunkshow.locations .event-title {
+        width: 27%;
+    }
+}
+@media only screen and (max-width: 1020px){
+    .event-trunkshow.locations .event-title {
+        width: 35.444%;
+    }
+}
+@media only screen and (max-width: 760px){
+    .locations .blocks {
+        text-align: center;
+    }
+    .event-trunkshow.locations .event-title {
+        width: 100%;
+    }
+}
