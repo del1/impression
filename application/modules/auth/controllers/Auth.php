@@ -16,41 +16,73 @@ class Auth extends Del
 
 	public function login()
 	{
-            if (isset($_POST['email'])) 
-            {
-                $this->form_validation->set_rules( 'email', 'Email', 'trim|required|valid_email' );
-                $this->form_validation->set_rules( 'password', 'Password', 'required|trim' );
+        if (isset($_POST['email'])) 
+        {
+            $this->form_validation->set_rules( 'email', 'Email', 'trim|required|valid_email' );
+            $this->form_validation->set_rules( 'password', 'Password', 'required|trim' );
 
-                if($this->form_validation->run() !== false){
-                    $data = array(
-                        'email' => $this->input->post('email',TRUE),
-                        'password' => $this->input->post('password',TRUE)
-                        );
-                    $login=$this->Auth->M_login($data);
-                   	if(isset($login['User_Id']))
+            if($this->form_validation->run() !== false){
+                $data = array(
+                    'email' => $this->input->post('email',TRUE),
+                    'password' => $this->input->post('password',TRUE)
+                    );
+                $login=$this->Auth->M_login($data);
+               	if(isset($login['User_Id']))
+				{
+					if($login['User_Type_Id']==1)
 					{
-						if($login['User_Type_Id']==1)
-						{
-							redirect('admin/');
-						}else
-						{
-							redirect('impression/');
-						}
+						redirect('admin/');
 					}else
 					{
-						if(isset($login['error']))
-						{
-							$this->session->set_flashdata('errorLogin',$login['error']);	
-							 redirect('impression/');
-						}
+						redirect('impression/');
 					}
-                }else{
-                    $this->session->set_flashdata('errorLogin',  validation_errors('<p class="alert alert-danger">', '</p>'));
-                    redirect('impression/');
-                }
+				}else
+				{
+					if(isset($login['error']))
+					{
+						$this->session->set_flashdata('errorLogin',$login['error']);	
+						 redirect('impression/');
+					}
+				}
             }else{
-                $this->load->view('login_view_new');
+                $this->session->set_flashdata('errorLogin',  validation_errors('<p class="alert alert-danger">', '</p>'));
+                redirect('impression/');
             }
+        }else{
+            $this->load->view('login_view_new');
+        }
+	}
+
+	public function subscribe()
+	{
+		$posted_data=$this->security->xss_clean($this->input->post());
+		$required_array = elements(array('email'), $posted_data);
+		$array=array('email_address'=>$required_array['email'],'status'=> 'subscribed','ip_signup'=>$_SERVER['SERVER_ADDR'],'timestamp_signup'=>date('Y-m-d H:i:s'));
+		$result = $this->mailchimp->call('POST', 'lists/'.LISTID.'/members',$array);
+		if($result['status'] == '404') 
+		{
+			echo 'fail';
+		}else{
+			$this->load->library('email');
+			$msg ="\nHi ".$required_array['email'].",\n";
+			$msg.="\nThanks for subscribing to Impression Bridal newslatter!";
+			$msg.="\nBrowse our collections, mark your favourites, and visit us at one of local stores.";
+			$msg.="\nWe look forward to working with you to find your dream gown!";
+			$msg.="\n\nWith love, \nImpression Bridal";
+			$this->email->from('info@impressionrbidalstore.com','Impression Bridal');
+			$this->email->to($required_array['email']);//$input['first_name']//$input['email_id']
+			$this->email->subject("Subscription Successfull");
+			$this->email->message($msg);	
+			if($this->email->send())
+			{
+				//$this->session->set_flashdata('success',"Registration successfully completed!");
+			}
+			else{
+				//$this->session->set_flashdata('success',"Registration successfully completed!");
+				$data['error'] = $this->email->print_debugger(array('headers'));
+		 	}
+			echo 'success';
+		}
 	}
 	public function register()
 	{
@@ -75,11 +107,18 @@ class Auth extends Del
 					'is_active'=>true,
 					'is_secure_request'=>'GzPq97' //random token
 				);
-
 				$id=$this->Auth->m_register($input);
 				if($id)
 				{
 					$this->session->set_flashdata('successRegister',  'Registration Successfull, Please Login');
+						/*mailchmip functionality*/
+						if($input['is_subscribed']=='true'){
+							$array=array('email_address'=>$input['email_id'],'status'=> 'pending','merge_fields'=>array('FNAME'=>$input['first_name'],'LNAME'=>$input['last_name']),'ip_signup'=>$_SERVER['SERVER_ADDR'],'timestamp_signup'=>date('Y-m-d H:i:s'));
+							$campaigns 	= $this->mailchimp->call('POST', 'lists/'.LISTID.'/members',$array);
+						}
+						/*end of mailchimp functionality*/
+
+
 						/*mail functionlity begin*/
 						$this->load->library('email');
 						$msg ="\nHi ".$input['first_name'].",\n";
@@ -99,7 +138,6 @@ class Auth extends Del
 						else{
 							$this->session->set_flashdata('success',"Registration successfully completed!");
 							$data['error'] = $this->email->print_debugger(array('headers'));
-							//$this->mprint($data);
 					 	}
 					redirect('impression/');
 				}else

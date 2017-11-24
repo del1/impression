@@ -80,6 +80,17 @@ class Impression extends Del {
 		}
 		return $intersect;
 	}
+
+	public function getapi(){
+		$campaigns 	= $this->mailchimp->call('GET', 'lists/aed0a16b22/members');
+		$this->sprint($campaigns);
+		/*$campaigns 	= $this->mailchimp->call('GET', 'lists');
+		$this->sprint($campaigns);*///send_welcome->true
+		/*$array=array('email_address'=>'mahesh.sakore@connexistech.com','status'=> 'pending','merge_fields'=>array('FNAME'=>"Mahesh",'LNAME'=>'sakore'),'ip_signup'=>$_SERVER['SERVER_ADDR'],'timestamp_signup'=>date('Y-m-d H:i:s'));
+		$campaigns 	= $this->mailchimp->call('POST', 'lists/'.LISTID.'/members',$array);
+		$this->sprint($campaigns);*/
+
+	}
 	public function collection($collection_id=''){
 
 		if($this->session->User_Id)

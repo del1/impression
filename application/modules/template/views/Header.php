@@ -80,7 +80,7 @@
     }
     .errorText{
       color: red;
-    font-weight: 500;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -210,6 +210,7 @@
           <?php $arr=array('id'=>"SubscriptionForm");
                             echo form_open('impression/subscribe',$arr); ?>
             <input type="email" id="subscribe_email" name="subscribe_email" placeholder="Email">
+            <span class="errorText subscribe_error"></span>
             <button type="button" class="btn btn-primary subscribe_Submit">Subscribe</button>
           <?php echo form_close(); ?>
           <a data-dismiss="modal" class="close-modal"><span class="icon-cancel"></span></a>
@@ -359,16 +360,27 @@
     val=$("#subscribe_email").val();
     if(IsEmail(val))
     {
-    $("#subscribe-modal").modal("hide");
-    swal(
-        'Success',
-        'You are successfully subscribed to our newslater!',
-        'success'
-      );
+      var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
+            csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
+            var data={email:val,[csrfName]:csrfHash};
+            $.post("<?php echo base_url('auth/subscribe') ?>", data, 
+            function(data, textStatus, xhr) {
+              if(data=="success")
+              {
+                $("#subscribe-modal").modal("hide");
+                  swal(
+                  'Success',
+                  'You are successfully subscribed to our newslater!',
+                  'success'
+                );
+              }else{
+                  $("#subscribe_email").css("border","1px solid red");
+                  $(".subscribe_error").html('This email already exist');
+              }
+        });
     }else{
-      $("#subscribe_email").css("border","1px solid red");
+       $("#subscribe_email").css("border","1px solid red");
     }
-    
   });
 
   function IsEmail(email) {
