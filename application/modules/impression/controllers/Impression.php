@@ -13,76 +13,87 @@ class Impression extends Del {
 	{
 		$data['store_list1']=$this->store->get_many_by('is_active',true);
 		$view = 'impression/home_view';
-		$data['insta_list']=$data['insta_list']=$this->insta->get_many_by('is_active',true);
+		$data['insta_list']=$this->insta->get_many_by('is_active',true);
+		$data['story_Image_list']=$this->stories->get_stories_by_image();
 		echo Modules::run('template/impression_Template', $view, $data);	
 	}
 
 	public function search()
 	{
-		$posted_data=$this->security->xss_clean($this->input->get());
-		if(isset($posted_data['cat']) && strlen(trim($posted_data['cat'])))
+		if(isset($_GET['srchterm'])){
+			$product_name=$this->input->get('srchterm');
+			$result=$this->tbl_product->search_product($product_name);
+			if(!empty($result))
+			foreach ($result as $key => $value) {
+				$intersect[]=$value->product_id;
+			}
+		}else
 		{
-			$where['season_id']=$posted_data['cat'];
-		}
-		if(isset($posted_data['sil']) && strlen(trim($posted_data['sil'])))
-		{
-			$sub[]=$posted_data['sil'];
-		}
-		if(isset($posted_data['neck']) && strlen(trim($posted_data['neck'])))
-		{
-			$sub[]=$posted_data['neck'];
-		}
-		if(isset($posted_data['waist']) && strlen(trim($posted_data['waist'])))
-		{
-			$sub[]=$posted_data['waist'];
-		}
-		if (isset($sub) && !empty($sub)) {
-			$sub_data=array();
-			foreach ($sub as $key => $value) {
-				$data[$key]=$this->lnk_produt_to_subcat->select_active_product($value);
-				foreach ($data[$key] as $key1 => $value1) {
-					$sub_data[$key][]=$value1->product_id;
+			$posted_data=$this->security->xss_clean($this->input->get());
+			if(isset($posted_data['cat']) && strlen(trim($posted_data['cat'])))
+			{
+				$where['season_id']=$posted_data['cat'];
+			}
+			if(isset($posted_data['sil']) && strlen(trim($posted_data['sil'])))
+			{
+				$sub[]=$posted_data['sil'];
+			}
+			if(isset($posted_data['neck']) && strlen(trim($posted_data['neck'])))
+			{
+				$sub[]=$posted_data['neck'];
+			}
+			if(isset($posted_data['waist']) && strlen(trim($posted_data['waist'])))
+			{
+				$sub[]=$posted_data['waist'];
+			}
+			if (isset($sub) && !empty($sub)) {
+				$sub_data=array();
+				foreach ($sub as $key => $value) {
+					$data[$key]=$this->lnk_produt_to_subcat->select_active_product($value);
+					foreach ($data[$key] as $key1 => $value1) {
+						$sub_data[$key][]=$value1->product_id;
+					}
 				}
 			}
-		}
-		if(isset($where) && !empty($where))
-		{
-			$cat_data=array();
-			$ct=array("season_id"=>$where['season_id'], "is_active"=>true);
-			$data=$this->tbl_product->select('product_id')->get_many_by($ct);
-			foreach ($data as $key1 => $value1) {
-				$cat_data[]=$value1->product_id;
-			}
-		}
-		if(isset($sub_data) && count($sub_data) >= 1)
-		{
-			if(count($sub_data) == 1)
+			if(isset($where) && !empty($where))
 			{
-				$intersect =$sub_data[0];
-				if(isset($cat_data) && !empty($cat_data))
+				$cat_data=array();
+				$ct=array("season_id"=>$where['season_id'], "is_active"=>true);
+				$data=$this->tbl_product->select('product_id')->get_many_by($ct);
+				foreach ($data as $key1 => $value1) {
+					$cat_data[]=$value1->product_id;
+				}
+			}
+			if(isset($sub_data) && count($sub_data) >= 1)
+			{
+				if(count($sub_data) == 1)
 				{
-					$intersect=array_intersect($intersect, $cat_data);
+					$intersect =$sub_data[0];
+					if(isset($cat_data) && !empty($cat_data))
+					{
+						$intersect=array_intersect($intersect, $cat_data);
+					}
+				}else{
+					$intersect = call_user_func_array('array_intersect',$sub_data);
+					if(isset($cat_data) && !empty($cat_data))
+					{
+						$intersect=array_intersect($intersect, $cat_data);
+					}
 				}
 			}else{
-				$intersect = call_user_func_array('array_intersect',$sub_data);
 				if(isset($cat_data) && !empty($cat_data))
 				{
-					$intersect=array_intersect($intersect, $cat_data);
+					$intersect =$cat_data;
+				}else{
+					$intersect =array();
 				}
-			}
-		}else{
-			if(isset($cat_data) && !empty($cat_data))
-			{
-				$intersect =$cat_data;
-			}else{
-				$intersect =array();
 			}
 		}
 		return $intersect;
 	}
 
 	public function getapi(){
-		$campaigns 	= $this->mailchimp->call('GET', 'lists/aed0a16b22/members');
+		$campaigns 	= $this->mailchimp->call('GET', 'lists/'.LISTID.'/members');
 		$this->sprint($campaigns);
 		/*$campaigns 	= $this->mailchimp->call('GET', 'lists');
 		$this->sprint($campaigns);*///send_welcome->true
@@ -98,40 +109,20 @@ class Impression extends Del {
 			$data['user_favorite_products']=$this->lnk_usr_to_fav->get_fav_produt_with_prodname($this->session->User_Id);
 		}
 		$data['brands_list']=$this->ref_brand->select('brand_id,brand_name')->get_many_by('is_active',true);
-		/*$data['catagory_list']=$this->ref_cat->select('cat_id,cat_name')->
-		with('subcat')->get_many_by('is_active',true);*/
 		$data['sub_catlist']=$this->ref_subcat->get_subcats_with_cat();
 		$data['season_list']=$this->ref_season->select('season_id,season')->get_many_by('is_active',true);
-		if(isset($_GET['cat']) || isset($_GET['sil'])|| isset($_GET['neck']) || isset($_GET['waist']))
+
+		
+		if(isset($_GET['srchterm']) || isset($_GET['cat']) || isset($_GET['sil'])|| isset($_GET['neck']) || isset($_GET['waist']))
 		{
 			$intersect=$this->search();
 			$query_string=http_build_query($_GET);
-			$config['full_tag_open'] = '<ul class="pagination pull-right">';
-			$config['full_tag_close'] = '</ul>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
-			$config['next_link'] = 'Next';
-			$config['prev_link'] = 'Previous';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '</li>';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '</li>';
-			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';
-			$config['first_link'] = '&lt;&lt;';
-			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';
-			$config['last_link'] = '&gt;&gt;';
-			$config['num_links'] = 5;
-
+			$config=$this->configsettings();
 			$config['suffix']="?".$query_string;
-			$config["uri_segment"] = $this->uri->total_segments();
 			$config['base_url'] = base_url('impression/collection/');
 			$config['first_url'] = $config['base_url'].'?'.$query_string;
 			$config['total_rows'] =count($intersect);
-			$config['per_page'] = 12;
+
 			$this->pagination->initialize($config); 
 			if(count($intersect))
 			{
@@ -152,43 +143,18 @@ class Impression extends Del {
 		}elseif($collection_id)
 		{ 
 			//normal product list
-			$config['full_tag_open'] = '<ul class="pagination pull-right">';
-			$config['full_tag_close'] = '</ul>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
-			$config['next_link'] = 'Next';
-			$config['prev_link'] = 'Previous';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '</li>';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '</li>';
-			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';
-			$config['first_link'] = '&lt;&lt;';
-			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';
-			$config['last_link'] = '&gt;&gt;';
-			$config['num_links'] = 5;
-			$config["uri_segment"] = $this->uri->total_segments();
-
-			//$config['base_url'] = $this->uri->uri_string();
+			$config=$this->configsettings();
 			$config['base_url'] = base_url('impression/collection/'.$collection_id);
 	        $config['total_rows'] =$this->tbl_product->count_by(array('is_active'=>true,"collection_id"=>$collection_id));
-	        $config['per_page'] = 12;
 	        $this->pagination->initialize($config); 
-	        $data['brands_list']=$this->ref_brand->select('brand_id,brand_name')->get_many_by('is_active',true);
 	        $data['product_list'] =$product_list= $this->tbl_product->limit($config['per_page'], $this->uri->segment(4))->get_many_by(array('is_active'=>true,"collection_id"=>$collection_id));
 
-	        //$this->sprint($product_list);
 	        if(!empty($product_list))
 	        {
 	        	foreach ($product_list as $product) {
 	        		$product_ids[]=$product->product_id;
 	        	}
-	        
-	       	$data['image_list']= $this->lnk_produt_to_docs->get_product_images($product_ids) ;
+	       		$data['image_list']= $this->lnk_produt_to_docs->get_product_images($product_ids) ;
 	       	}
 	        $data['links'] = $this->pagination->create_links();
 	        $data['breadCrumb']["Home"]=base_url('/');
@@ -197,9 +163,7 @@ class Impression extends Del {
 	        $data['breadCrumb']["Last"]=$last->collection_name;
 	        $view = 'impression/list_result';
 		}else{
-
 			$data['collection_list1']=$this->ref_coll->get_list_with_images();
-			//$this->mprint($data);
 			$view = 'impression/collection_view';
 		}
 		echo Modules::run('template/impression_Template', $view, $data);	
@@ -210,16 +174,49 @@ class Impression extends Del {
 		redirect(base_url());
 	}
 
+	public function configsettings()
+	{
+		$config['full_tag_open'] = '<ul class="pagination pull-right">';
+		$config['full_tag_close'] = '</ul>';
+		$config['cur_tag_open'] = '<li class="active"><a href="#">';
+		$config['cur_tag_close'] = '</a></li>';
+		$config['num_tag_open'] = '<li>';
+		$config['num_tag_close'] = '</li>';
+		$config['next_link'] = 'Next';
+		$config['prev_link'] = 'Previous';
+		$config['next_tag_open'] = '<li>';
+		$config['next_tag_close'] = '</li>';
+		$config['prev_tag_open'] = '<li>';
+		$config['prev_tag_close'] = '</li>';
+		$config['first_tag_open'] = '<li>';
+		$config['first_tag_close'] = '</li>';
+		$config['first_link'] = '&lt;&lt;';
+		$config['last_tag_open'] = '<li>';
+		$config['last_tag_close'] = '</li>';
+		$config['last_link'] = '&gt;&gt;';
+		$config['num_links'] = 5;
+		$config["uri_segment"] = $this->uri->total_segments();
+		$config['per_page'] = 12;
+		return $config;
+	}
+
 
 	public function collection_brand()
 	{
-		$data['brands_list']=$this->ref_brand->select('brand_id,brand_name')->get_many_by('is_active',true);
-		$data['sub_catlist']=$this->ref_subcat->get_subcats_with_cat();
+		$data['brands_list']=$brands=$this->ref_brand->select('brand_id,brand_name')->get_many_by('is_active',true);
+		if(!empty($brands))
+		{
+			foreach ($brands as $key => $value) {
+				$brand_ids[]=$value->brand_id;
+			}
+			$data['brand_images']=$this->lnk_brands_to_docs->get_unique_brand_images($brand_ids);
+			$data['sub_catlist']=$this->ref_subcat->get_subcats_with_cat();
+		}
 		$view = 'impression/brand_collection_view';
 		echo Modules::run('template/impression_Template', $view, $data);
 	}
 
-	public function brand($brand_id)
+	public function brand($brand_id='')
 	{
 		if($this->session->User_Id)
 		{
@@ -228,41 +225,30 @@ class Impression extends Del {
 		$data['brands_list']=$this->ref_brand->select('brand_id,brand_name')->get_many_by('is_active',true);
 		$data['sub_catlist']=$this->ref_subcat->get_subcats_with_cat();
 		$data['season_list']=$this->ref_season->select('season_id,season')->get_many_by('is_active',true);
-		if(isset($_GET['cat']) || isset($_GET['sil'])|| isset($_GET['neck']) || isset($_GET['waist']))
+		if(isset($_GET['srchterm']) ||isset($_GET['cat']) || isset($_GET['sil'])|| isset($_GET['neck']) || isset($_GET['waist']))
 		{
 			$intersect=$this->search();
 			$query_string=http_build_query($_GET);
-			$config['full_tag_open'] = '<ul class="pagination pull-right">';
-			$config['full_tag_close'] = '</ul>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
-			$config['next_link'] = 'Next';
-			$config['prev_link'] = 'Previous';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '</li>';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '</li>';
-			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';
-			$config['first_link'] = '&lt;&lt;';
-			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';
-			$config['last_link'] = '&gt;&gt;';
-			$config['num_links'] = 5;
-
+			$config=$this->configsettings();
 			$config['suffix']="?".$query_string;
-			$config["uri_segment"] = $this->uri->total_segments();
-			$config['base_url'] = base_url('impression/brand/'.$brand_id);
+			if($brand_id)
+			{
+				$config['base_url'] = base_url('impression/brand/'.$brand_id.'/');
+			}else{
+				$config['base_url'] = base_url('impression/brand/');
+			}
+			
 			$config['first_url'] = $config['base_url'].'?'.$query_string;
 			$config['total_rows'] =count($intersect);
-			$config['per_page'] = 12;
 			$this->pagination->initialize($config); 
 			if(count($intersect))
 			{
-				//raw product list
-				$intersect1=array_slice($intersect, $this->uri->segment(4), $config['per_page']);
+				if($brand_id)
+				{
+					$intersect1=array_slice($intersect, $this->uri->segment(4), $config['per_page']);
+				}else{
+					$intersect1=array_slice($intersect, $this->uri->segment(3), $config['per_page']);
+				}
 				$data['product_list'] =$product_list=$this->tbl_product->get_product_list_within($intersect1);
 			}else{
 				$data['product_list'] =$product_list=array();
@@ -276,33 +262,11 @@ class Impression extends Del {
 	        $data['breadCrumb']["Collections"]=base_url('impression/collection_brand');
 			$view = 'impression/list_result';
 		}
-		if($brand_id)
+		elseif($brand_id)
 		{ 
-			$config['full_tag_open'] = '<ul class="pagination pull-right">';
-			$config['full_tag_close'] = '</ul>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
-			$config['next_link'] = 'Next';
-			$config['prev_link'] = 'Previous';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '</li>';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '</li>';
-			$config['first_tag_open'] = '<li>';
-			$config['first_tag_close'] = '</li>';
-			$config['first_link'] = '&lt;&lt;';
-			$config['last_tag_open'] = '<li>';
-			$config['last_tag_close'] = '</li>';
-			$config['last_link'] = '&gt;&gt;';
-			$config['num_links'] = 5;
-			$config["uri_segment"] = $this->uri->total_segments();
-
-			//$config['base_url'] = $this->uri->uri_string();
-			$config['base_url'] = base_url('impression/brand/'.$brand_id);
+			$config=$this->configsettings();
+			$config['base_url'] = base_url('impression/brand/');
 	        $config['total_rows'] =$this->tbl_product->count_by(array('is_active'=>true,"brand_id"=>$brand_id));
-	        $config['per_page'] = 12;
 	        $this->pagination->initialize($config); 
 	        $data['product_list'] =$product_list= $this->tbl_product->limit($config['per_page'], $this->uri->segment(4))->get_many_by(array('is_active'=>true,"brand_id"=>$brand_id));
 	        if(!empty($product_list))
@@ -532,7 +496,7 @@ class Impression extends Del {
 		        if ( ! $this->upload->do_upload())
 		        {
 		            $error = array('error' => $this->upload->display_errors());
-		            $this->mprint($error);
+		            //$this->mprint($error);
 		        }
 		        else
 		        {
@@ -579,7 +543,7 @@ class Impression extends Del {
 			else{
 				$this->session->set_flashdata('success',">Password Sent On your Email-ID...!");
 				$data['error'] = $this->email->print_debugger(array('headers'));
-				$this->mprint($data);
+				//$this->mprint($data);
 		 	}
 		}
 		redirect(base_url('impression/real_brides'));
@@ -621,7 +585,7 @@ class Impression extends Del {
 			else{
 				//$this->session->set_flashdata('success',">Password Sent On your Email-ID...!");
 				$data['error'] = $this->email->print_debugger(array('headers'));
-				$this->mprint($data);
+				//$this->mprint($data);
 		 	}
 		redirect('impression/appointment');
 	}
@@ -712,8 +676,8 @@ class Impression extends Del {
 			else{
 				$this->session->set_flashdata('error',"There was error occured while submitting the form");
 				$data['error'] = $this->email->print_debugger(array('headers'));
-				$this->mprint($data);
-				//redirect('impression/contact_us');
+				//$this->mprint($data);
+				redirect('impression/contact_us');
 			 }
 	}
 

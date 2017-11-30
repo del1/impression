@@ -19,6 +19,10 @@ class Admin extends Del {
 		echo Modules::run('template/admin_template', $view, $data);	
 	}
 
+	public function phpinfo()
+	{
+		phpinfo();
+	}
 
 	/*Genral Function section begins*/
 
@@ -449,6 +453,36 @@ class Admin extends Del {
 		echo Modules::run('template/admin_template', $view, $data);	
 	}
 
+	public function get_instagramimage(){
+		$posted_data=$this->security->xss_clean($this->input->post());
+		$required_array = elements(array('url'), $posted_data);
+		if(isset($required_array['url']))
+		{
+			$url=$required_array['url'];
+			libxml_use_internal_errors(true);
+			$doc = new DomDocument();
+			$doc->loadHTML(file_get_contents($url));
+			$xpath = new DOMXPath($doc);
+			$query = '//*/meta[starts-with(@property, \'og:\')]';
+			$metas = $xpath->query($query);
+			foreach ($metas as $meta) {
+				$property = $meta->getAttribute('property');
+				if($property=="og:image")
+				{
+					$content = $meta->getAttribute('content');
+					$required_array['image']=$content;
+					break;
+				}
+			}
+			if(isset($required_array['image']))
+			{
+				echo json_encode($required_array['image']);
+			}else{
+				echo "fail";
+			}
+		}
+	}
+
 	public function add_update_insta()
 	{
 		$posted_data=$this->security->xss_clean($this->input->post());
@@ -758,6 +792,48 @@ class Admin extends Del {
 		redirect('admin/season');
 	}
 
+	
+	public function extract_zip_upload()
+	{
+		$posted_data=$this->security->xss_clean($this->input->post());
+		$required_array = elements(array('filename','season_id'), $posted_data);
+		$season_id=$required_array['season_id'];
+		$zipfile='assets/images/zip/'.$required_array['filename'];
+		$this->load->library('unzip');
+   		$this->unzip->allow(array('jpeg', 'jpg'));
+   		$this->unzip->extract($zipfile, 'assets/images/tmp/');
+   		$season_products=$this->tbl_product->select('product_id,product_name')->get_many_by('season_id',$season_id);
+   		foreach ($season_products as $product) {
+   			$c_path='assets/images/tmp/'.$product->product_name;
+   			$product_id=$product->product_id;
+   			$real_path='assets/images/tmp/'.$product->product_name.'/';
+   			if(file_exists($c_path))
+   			{
+   				$files=$this->checkFilesInFolder($real_path);
+   				if(!empty($files))
+   				{
+   					foreach ($files as $index => $filename) {
+   						$c_filename=$real_path.$filename;
+       					$imageupload = \Cloudinary\Uploader::upload($c_filename);
+			            $img[]=$imageupload;
+			            $str=explode('upload/', $imageupload['secure_url']);
+			            $inp['doc_path']=$str[1];
+			            $inp['is_active']=true;
+			           	$this->documents->insert($inp);
+						$document_id=$this->db->insert_id();
+						//insert in to lnk table
+						$inp1['document_id']=$document_id;
+						$inp1['product_id']=$product_id;
+						$this->lnk_produt_to_docs->insert($inp1);
+			            unlink($c_filename);
+		            }
+		            //unlink($c_path);
+   				}
+   			}
+   		}
+   		//rmdir("./assets/images/tmp");
+	}
+
 	public function upload_season_zip()
 	{
 		$posted_data=$this->security->xss_clean($this->input->post());
@@ -798,6 +874,8 @@ class Admin extends Del {
 		           		//unlink($apth.$fileInfo['file_name']);
 		           		// /full_path,file_name
 		           		$files=$this->checkFilesInFolder($upload_path);
+
+		           
 		           		$season_products=$this->tbl_product->select('product_id,product_name')->get_many_by('season_id',$season_id);
 
 		           		foreach ($season_products as $product) {

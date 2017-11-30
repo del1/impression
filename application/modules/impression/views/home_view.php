@@ -8,36 +8,7 @@
 
   <section id="banners" class="banners">
     <div class="container"><!-- container-fluid -->
-<!--         <div class="col-sm-12 col-lg-2 col-md-3 sidebar">
-          <ul class="banner-menu menu-center">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Find a store <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php// echo base_url('impression/appointment'); ?>">make an appointment</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php// echo base_url('impression/real_brides');?>">real brides</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php// echo base_url('impression/event_trunkshow');?>">trunkshows / events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php// echo base_url('impression/favorites');?>">my favorites</a>
-            </li>
-            <li class="nav-item find-style">
-              <a class="nav-link find-style" href="#">find a style</a>
-              <form id="search_by_style">
-                <div class="input-group">
-                  <input type="text" class="" placeholder="Search by style number">
-                  <span class="input-group-btn">
-                    <button class="btn" type="button"><span class="icon-search"></span></button>
-                  </span>
-                </div>
-              </form>
-            </li>
-          </ul>
-        </div> -->
+
 
         <div class="col-sm-12 col-lg-12 col-md-12 main-right-bar">
           <div class="row">
@@ -88,6 +59,15 @@
                     </div>
                   </div>
                 </div>
+                <?php if(!empty($story_Image_list)) { ?>
+                  <?php foreach ($story_Image_list as $storykey => $storyvalue) { ?>
+                    <div class="col-lg-4 col-md-4 col-sm-4 nopadding">
+                      <div class="bride-img">
+                        <img src="<?php echo"https://res.cloudinary.com/".CLOUDNARYNAME."/image/upload/c_fill,g_faces:center,q_10/".$storyvalue['doc_path'];?>" class="img-responsive" alt="img01"/>
+                      </div>
+                    </div>
+                  <?php } ?>
+                <?php }else{ ?>
                 <div class="brid-wrap">
                   <div class="col-lg-4 col-md-4 col-sm-4 nopadding">
                     <div class="bride-img">
@@ -121,6 +101,7 @@
                     </div>
                   </div>
                 </div>
+                <?php } ?>
               </div>
             </div>
           </div>

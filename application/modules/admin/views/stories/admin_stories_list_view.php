@@ -20,7 +20,7 @@
     </div>
     <div class="page-content container-fluid">
         <div class="panel-body">
-            <a href="<?php echo base_url('admin/manage_story'); ?>" id="add_store" class="btn btn-success btnleft">Add Store</a>
+            <a href="<?php echo base_url('admin/manage_story'); ?>" id="add_store" class="btn btn-success btnleft">Add Story</a>
             <table id="story_list_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
             <thead>
               <tr>

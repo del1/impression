@@ -38,10 +38,19 @@ class Tbl_product_model extends MY_Model{
 
 	public function get_product_list_within($product_id)
 	{
+		if(!empty($product_id))
+		{
 		return $this->db->select('tbl_products.*')
 			->where_in("product_id",$product_id)
 			->get('tbl_products')->result();
+		}
 	}
 
-	
+	public function search_product($product_name='')
+	{
+		if($product_name)
+		{
+			return $this->db->select('product_id')->from('tbl_products')->where("product_name LIKE '%$product_name%'")->get()->result();
+		}
+	}	
 }

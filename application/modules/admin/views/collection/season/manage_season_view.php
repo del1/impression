@@ -96,20 +96,16 @@ textarea {
                     <?php if(isset($season_details->season_id)){ ?>
                         <div class="col-sm-3 col-md-3 ">
                             <?php $arr=array('class'=>"form-horizontal");
-                            echo form_open_multipart('admin/upload_season_zip',$arr); ?>
-                            <label for="Store Address" class ="form-control-label col-sm-12 col-xl-12"><strong>Upload season images zip file</strong></label>
+                            echo form_open_multipart('admin/extract_zip_upload',$arr); ?>
                             <div class="form-group row mt-20">
-                                <div class="col-sm-8 col-xl-8 col-xs-6 text-right">
-                                    <span class="btn btn-sm btn-success fileinput-button">
-                                        <i class="fa fa-plus"></i>
-                                        <span>Select zip file...</span>
-                                        <input id="uploadCsv" type="file" name="userfile" accept="  application/zip">
-                                    </span>
+                                <label for="Store Address" class ="form-control-label col-sm-4 col-xl-4 col-xs-12">Images zip file name</label>
+                                <div class="col-sm-8 col-xl-8 col-xs-12 text-right">
+                                    <input type="text" class="form-control" name="filename" placeholder="Enter file name" value=""/>
                                     <?php if(isset($season_details->season_id)){ ?>
                                         <input type="hidden" name="season_id" value="<?php echo $season_details->season_id; ?>">
                                     <?php }  ?>
                                 </div>
-                                <div class="col-sm-4 col-xl-4 col-xs-6 text-right">
+                                <div class="col-sm-12 col-xl-12 col-xs-12 text-right">
                                     <button type="submit" class="btn-primary btn pullRight">Submit </button>
                                 </div>
                             </div>

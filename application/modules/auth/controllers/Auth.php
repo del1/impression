@@ -63,24 +63,6 @@ class Auth extends Del
 		{
 			echo 'fail';
 		}else{
-			$this->load->library('email');
-			$msg ="\nHi ".$required_array['email'].",\n";
-			$msg.="\nThanks for subscribing to Impression Bridal newslatter!";
-			$msg.="\nBrowse our collections, mark your favourites, and visit us at one of local stores.";
-			$msg.="\nWe look forward to working with you to find your dream gown!";
-			$msg.="\n\nWith love, \nImpression Bridal";
-			$this->email->from('info@impressionrbidalstore.com','Impression Bridal');
-			$this->email->to($required_array['email']);//$input['first_name']//$input['email_id']
-			$this->email->subject("Subscription Successfull");
-			$this->email->message($msg);	
-			if($this->email->send())
-			{
-				//$this->session->set_flashdata('success',"Registration successfully completed!");
-			}
-			else{
-				//$this->session->set_flashdata('success',"Registration successfully completed!");
-				$data['error'] = $this->email->print_debugger(array('headers'));
-		 	}
 			echo 'success';
 		}
 	}
@@ -198,74 +180,103 @@ class Auth extends Del
     	}
     }
 
-	function forgot_password()
-	{ 
-		$email=$this->input->post('Email_forgott_pass');	
-		
-		//$data = array('Email' =>'girdtester@gmail.com');
-		$input_array=array("email"=>$email);
-		$query=$this->Auth_model->fetch_user_data_by_attr($input_array);
-		if ($query->num_rows() > 0) {
-		$response_array=$query->result();
+    public function reset_password($token='')
+    {
+    	if($token)
+    	{
+	    	$token=$this->security->xss_clean($this->uri->segment(3));
+	    	$token_request=$this->reset_links->get_by('lnk',$token);
+	    	if(!empty($token_request))
+	    	{
+	    		$user_details=$this->users->get($token_request->userid);
+	    		$this->load->view('auth/reset_password',$user_details);
+	    	}else{
+				show_404();
+	    	}
+	    }else{
+	    	show_404();
+	    }
+    }
+
+    public function update_password()
+    {
+		$this->form_validation->set_rules('password', 'Password', 'trim|required' );
+		$this->form_validation->set_rules('confirm_password', 'Confirm Password', 'required|matches[password]');
+		if($this->form_validation->run($this) !== FALSE)
+		{
+			$posted_data=$this->security->xss_clean($this->input->post());
+			$required_array = elements(array('password'), $posted_data);
+			$required_array['last_updated']=date('Y-m-d H:i:s');
+			$this->users->update($posted_data['user_id'],$required_array);
+			$this->session->set_flashdata('successLogin','Your Password Changed successfully');
+			redirect('impression/');
+		}else{
+			$this->session->set_flashdata('errorReset',  validation_errors('<p class="alert alert-danger">', '</p>'));
+			redirect($_SERVER['HTTP_REFERER']);
 		}
-		
-		if(empty($response_array))//email not found case
+    }
+
+	public function forgot_password()
+	{ 
+		$this->form_validation->set_rules('Email_forgott_pass', 'Email', 'trim|required|xss_clean');
+		if($this->form_validation->run($this) !== FALSE)
 		{
-			//"email is not valid";
-			$this->session->set_flashdata('success',"Password reset link has been sent to your mail address");
-			redirect('Login');	
-		}else //email found case
-		{
-			foreach ($response_array as $row) 
+			$posted_data=$this->security->xss_clean($this->input->post());
+			$required_array = elements(array('Email_forgott_pass'), $posted_data);
+			$user_details=$this->users->get_by('email_id',$required_array['Email_forgott_pass']);
+			if(!empty($user_details))
 			{
-				$User_Id=$row->userid;
-				$Email_Address=$row->email;
-				$username=$row->username;
-				//$user_salt=$row->salt;
-				//$isActive=$row->Is_Active;
+				$this->load->helper('string');
+				$input['userid']=$user_details->user_id;
+				$input['lnk']=random_string('alnum', 79);
+				$input['reg_time']=date('Y-m-d H:i:s');
+				$ct=$this->reset_links->get_by('userid',$user_details->user_id);
+				if(!empty($ct))
+				{
+					$this->reset_links->update($ct->link_id,$input);
+				}else{
+					$this->reset_links->insert($input);
+				}
+            	$config['mailtype'] = 'html';
+            	$this->email->initialize($config);
+            	$data['lnk']=base_url('auth/reset_password/'.$input['lnk']);
+            	$data['username']=$user_details->first_name;
+            	$data['fullname']=$user_details->first_name." ".$user_details->last_name;
+            	//$data['logo']=base_url('assets/images/logo.png');
+            	$data['logo']='http://www.impressionbridalstore.com/assets/images/logo.png';
+
+
+            	/*$msg ="\n\nHello: ".$user_details->first_name."\n";
+				$msg.="\n\nYou have made a request to change your password.";
+				$msg.="\n\nPlease click on the link below.";
+				$msg.="\n \nYour Reset Password Link :"."   ".$link;
+				$msg.="\n\nPlease do not reply to this e-mail as this account is used for SEND requests only.";
+				$msg.="\n\nThank You \nAdministrator\nImpression Bridal";*/
+				$body = $this->load->view('auth/template/reset_password',$data,TRUE);
+				$this->email->from('info@impressionrbidalstore.com','Impression Bridal');
+				$this->email->to($required_array['Email_forgott_pass']);
+				$this->email->subject("$user_details->first_name, here's the link to reset your password");
+				$this->email->message($body);	
+				if($this->email->send())
+				{
+					$this->session->set_flashdata('successReset',"Reset Password Link Sent On your Email address");
+					//$this->mprint("success");
+					redirect('impression/');
+				}
+				else{
+					$data['error'] = $this->email->print_debugger(array('headers'));
+					$this->session->set_flashdata('successReset',"Reset Password Link Sent On your Email address");
+					//$this->mprint($data);
+					redirect('impression/');
+				 }
+			}else{
+				//wrong email
+				$this->session->set_flashdata('successReset', 'Reset Password Link Sent On your Email address');
+				redirect('impression/');
 			}
-						
-			$data=array(
-				'User_Id' =>$User_Id ,
-				'Email_Address' =>$Email_Address,
-				'Username' => $username
-			); 
-				//print_r($data); 	
-			$this->load->library('encrypt');
-			$key = "k946RvU82N";
-			
-			$hash=$this->encrypt->encode($User_Id,$key);
-			
-			$msg ="\n\nHello:".$username."\n";
-
-			$msg.="\n\nYou have made a request to change your password.";
-
-			$msg.="\n\nPlease click on the link below.";
-			//echo 'here is the msg'.$msg; 
-			$msg.="\n \nYour Reset Password Link :"."   "."http://sparkinwords.com/Auth/reset_password/".$hash;
-
-			$msg.="\n\nPlease do not reply to this e-mail as this account is used for SEND requests only.";
-
-
-			$msg.="\n\nThank You \nAdministrator\nSparkinwords";
-			//echo $msg; 
-			$this->load->library('email');
-			$this->email->from('ruchibhargava1234561@gmail.com');
-			$this->email->to($Email_Address);
-			$this->email->subject("Sparkinwords Forgot Password");
-			$this->email->message($msg);
-			//$this->email->attach("assets/img/icons/email_logo.png", "inline");
-				//echo $msg."    here msg part finish"; 						
-			if($this->email->send())
-			{
-				$this->session->set_flashdata('success',"Reset Password Link Sent On your Email-ID...!");
-				redirect('Login');
-			}
-			else{
-				$this->session->set_flashdata('success',">Password Sent On your Email-ID...!");
-				$data['error'] = $this->email->print_debugger(array('headers'));
-				redirect('Login');
-			 }
+		}else{
+			$this->session->set_flashdata('errorReset',  validation_errors('<p class="alert alert-danger">', '</p>'));
+			redirect('impression/');
 		}
 	}
 

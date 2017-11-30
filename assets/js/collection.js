@@ -27,10 +27,6 @@ $(document).ready(function(){
 			$(this).addClass("active");
 		}
 	});
-	$(document).on('click','.cradio',function(e){
-		console.log($(this).data('id'));
-		
-	})
 
 	$(document).on('click',function(e){
 		var target=$(e.target).closest(".btn-select");
