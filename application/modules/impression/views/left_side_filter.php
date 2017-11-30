@@ -55,7 +55,12 @@
     jQuery(document).ready(function($) {
         $(document).on('change','.cradio',function(e){
             $('.cradio:checkbox:checked').each(function(index, el) {
-                
+                if($(this).data('style')=='brand'){
+                    
+
+                }else if($(this).data('style')=='sub_cat_id'){
+
+                }
             });
         })
     });
