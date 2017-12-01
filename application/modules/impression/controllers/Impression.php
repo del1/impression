@@ -18,6 +18,55 @@ class Impression extends Del {
 		echo Modules::run('template/impression_Template', $view, $data);	
 	}
 
+	public function impression_search()
+	{
+		$posted_data=$this->security->xss_clean($this->input->post());
+		$result=array();
+		if(isset($posted_data['brand']))
+		{
+			$result=$this->tbl_product->search_brand_product($posted_data['brand']);
+
+			foreach ($result as $key => $value) {
+				$result_array[]=$value->product_id;
+			}
+		}
+		if(isset($posted_data['sub_cat']))
+		{
+			$result=$this->lnk_produt_to_subcat->search_product_with_subcatagory($posted_data['sub_cat']);
+			foreach ($result as $key => $value) {
+				$result_array[]=$value->product_id;
+			}
+		}
+		if(!empty($result_array))
+		{
+			$intersect=array_unique($result_array);
+			$config=$this->configsettings();
+			$config['total_rows'] =count($intersect);
+			$this->pagination->initialize($config); 
+			if(count($intersect))
+			{
+				/*if($brand_id)
+				{
+					$intersect1=array_slice($intersect, $this->uri->segment(4), $config['per_page']);
+				}else{
+					$intersect1=array_slice($intersect, $this->uri->segment(3), $config['per_page']);
+				}*/
+				$data['product_list'] =$product_list=$this->tbl_product->get_product_list_within($intersect);
+			}else{
+				$data['product_list'] =$product_list=array();
+			}
+		 	if(!empty($product_list))
+	        {
+	       		$data['image_list']= $this->lnk_produt_to_docs->get_product_images($intersect) ;
+	       	}
+	        $data['links'] = $this->pagination->create_links();
+	        $this->load->view('impression/list_ajax',$data);
+		}else{
+			echo "No results found";
+		}
+		
+	}
+
 	public function search()
 	{
 		if(isset($_GET['srchterm'])){
@@ -265,7 +314,7 @@ class Impression extends Del {
 		elseif($brand_id)
 		{ 
 			$config=$this->configsettings();
-			$config['base_url'] = base_url('impression/brand/');
+			$config['base_url'] = base_url('impression/brand/'.$brand_id);
 	        $config['total_rows'] =$this->tbl_product->count_by(array('is_active'=>true,"brand_id"=>$brand_id));
 	        $this->pagination->initialize($config); 
 	        $data['product_list'] =$product_list= $this->tbl_product->limit($config['per_page'], $this->uri->segment(4))->get_many_by(array('is_active'=>true,"brand_id"=>$brand_id));

@@ -13,4 +13,11 @@ class Lnk_product_to_subcat_model extends MY_Model{
 			->join('tbl_products','lnk_product_to_subcat.product_id = tbl_products.product_id')
 			->get_where('lnk_product_to_subcat',array("tbl_products.is_active" =>true,"lnk_product_to_subcat.sub_cat_id"=> $sub_cat_id))->result();
 	}
+
+	public function search_product_with_subcatagory($sub_cat_id)
+	{
+		return $this->db->distinct()->select('lnk_product_to_subcat.product_id')
+			->where_in("lnk_product_to_subcat.sub_cat_id",$sub_cat_id)
+			->get('lnk_product_to_subcat')->result();
+	}
 }

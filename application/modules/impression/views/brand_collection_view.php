@@ -23,7 +23,7 @@
             $brand_image_array[$value->brand_id]=$value->doc_path;
           }
         } ?>
-        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 targetdivajax">
           <?php foreach ($brands_list as $key => $value) { ?>
             <div class="gallery-product col-lg-4 col-md-4 col-sm-6 col-xs-12">
               <div class="pro-wrap">

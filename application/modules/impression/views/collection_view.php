@@ -31,7 +31,7 @@
 
             <?php $this->load->view('left_side_filter'); ?>
 
-            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10">
+            <div class="col-lg-10 col-md-10 col-sm-10 col-xs-10 targetdivajax">
 
                 <div>
 

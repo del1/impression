@@ -827,11 +827,13 @@ class Admin extends Del {
 						$this->lnk_produt_to_docs->insert($inp1);
 			            unlink($c_filename);
 		            }
-		            //unlink($c_path);
+		            rmdir($c_path);
    				}
    			}
    		}
    		//rmdir("./assets/images/tmp");
+   		$this->session->set_flashdata('success',  'Zip file Imported successfully');
+		redirect('admin/season');
 	}
 
 	public function upload_season_zip()

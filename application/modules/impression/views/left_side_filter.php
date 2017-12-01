@@ -54,14 +54,22 @@
 <script type="text/javascript">
     jQuery(document).ready(function($) {
         $(document).on('change','.cradio',function(e){
+            brand=[];sub_cat=[];
             $('.cradio:checkbox:checked').each(function(index, el) {
                 if($(this).data('style')=='brand'){
-                    
+                    brand.push($(this).data('id'));
 
                 }else if($(this).data('style')=='sub_cat_id'){
-
+                     sub_cat.push($(this).data('id'));
                 }
             });
+            var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
+            csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
+            var data={brand:brand,sub_cat:sub_cat,[csrfName]:csrfHash};
+            $.post("<?php echo base_url('impression/impression_search') ?>", data, 
+                function(data, textStatus, xhr) {
+                    $(".targetdivajax").html(data);
+                });
         })
     });
 </script>

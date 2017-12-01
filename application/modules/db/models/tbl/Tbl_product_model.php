@@ -53,4 +53,11 @@ class Tbl_product_model extends MY_Model{
 			return $this->db->select('product_id')->from('tbl_products')->where("product_name LIKE '%$product_name%'")->get()->result();
 		}
 	}	
+
+	public function search_brand_product($brand_ids)
+	{
+		return $this->db->select('tbl_products.product_id')
+			->where_in("tbl_products.brand_id",$brand_ids)
+			->get('tbl_products')->result();
+	}
 }
