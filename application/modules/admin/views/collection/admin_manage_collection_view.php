@@ -51,11 +51,12 @@ textarea {
                     </ol>
                 </div>
             </div>
-            <?php $collectionDetails=$collectionDetails[0]; ?>
+            
             <!-- start from here -->
             <div class="panel-body">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 mt-20">
+                        <?php $collectionDetails=$collectionDetails[0]; ?>
                         <?php $arr=array('class'=>"form-horizontal");
                             echo form_open_multipart('admin/update_collection',$arr); ?>
                             <div class="form-group row">

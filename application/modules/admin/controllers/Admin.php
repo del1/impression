@@ -250,8 +250,13 @@ class Admin extends Del {
 	{
 		$data['product_list']=$this->tbl_product->get_all_product();
 		$data['page']='All Products';
-		$view = 'admin/collection/admin_all_product_list';
-		echo Modules::run('template/admin_template', $view, $data);	
+		if (!$this->input->is_ajax_request()) {
+			$view = 'admin/collection/admin_all_product_list';
+			echo Modules::run('template/admin_template', $view, $data);	
+		}else{
+
+		}
+		
 	}
 
 
@@ -270,8 +275,13 @@ class Admin extends Del {
 		$data['collection_list']=$this->ref_coll->select('collection_id,collection_name')->get_many_by('is_active',true);
 		$data['season_list']=$this->ref_season->select('season_id,season')->get_many_by('is_active',true);
 		$data['page']='All Products';
-		$view = 'admin/collection/admin_manage_product_view';
-		echo Modules::run('template/admin_template', $view, $data);	
+		if (!$this->input->is_ajax_request()) {
+			$view = 'admin/collection/admin_manage_product_view';
+			echo Modules::run('template/admin_template', $view, $data);	
+		}else{
+			$view = 'admin/collection/ajax/collection/ajax_admin_manage_collection_view';
+			$this->load->view($view,$data);
+		}
 	}
 
 	public function add_update_product()
@@ -643,12 +653,8 @@ class Admin extends Del {
 		}else{
 			$this->ref_season->insert($required_array);
 			$product_id=$this->db->insert_id();//story_id aka product_id
-		}		
-		//redirect(base_url('admin/season'));
+		}
 
-		//$tmpNameMy =$csv_file ='./'.$input['file1'];
-		
-		//if
 		if(isset($_FILES['userfile']) && strlen(trim($_FILES['userfile']['name'])))
 		{
 			if(!file_exists("./assets/upload/season/data/".$product_id))
@@ -658,7 +664,7 @@ class Admin extends Del {
 			$config = array(
 				'upload_path' => "./assets/upload/season/data/".$product_id."/",
 				'overwrite' => TRUE,
-				'allowed_types' => "*"
+				'allowed_types' => "csv"
 				//'encrypt_name' => TRUE //encrypting the file name
 				//'max_size' => "2048000", // Can be set to particular file size , here it is 2 MB(2048 Kb)
 			);
@@ -735,6 +741,7 @@ class Admin extends Del {
 
 						    	if(!empty($p_details)) //if the record is already present
 						    	{//update the product
+						    		$inserted[]=$style_no;
 						    		if(isset($season_flip[$product['Season']]))
 						    		{
 						    			$product_details['season_id']=$season_flip[$product['Season']];
@@ -744,7 +751,13 @@ class Admin extends Del {
 						    		$product_details['product_id']=$p_details[0]->product_id;
 						    		$row_update[]=$product_details;
 						    	}else{//insert the product  //record is not present
-						    		$product_details['season_id']=$season_id;
+						    		$inserted[]=$style_no;
+						    		if(isset($season_flip[$product['Season']]))
+						    		{
+						    			$product_details['season_id']=$season_flip[$product['Season']];
+						    		}else{
+						    			$product_details['season_id']=$season_id;
+						    		}
 						    		$row[]=$product_details;
 					    		}
 					    	}
@@ -779,6 +792,8 @@ class Admin extends Del {
 				    		{
 				    			$this->db->insert_batch('lnk_product_to_subcat', $row_link); 
 				    		}
+				    	}else{
+				    		$failed_product[]=$style_no;
 				    	}
 				    }
 				    
@@ -788,7 +803,14 @@ class Admin extends Del {
 	           	}
 	        }
 		}
-		$this->session->set_flashdata('success',  'Data file Imported successfully');
+		if(isset($inserted))
+		{
+			$this->session->set_flashdata('successProduct',$inserted);
+		}
+		if(isset($failed_product))
+		{
+			$this->session->set_flashdata('failedProduct',$failed_product);
+		}
 		redirect('admin/season');
 	}
 
@@ -801,39 +823,76 @@ class Admin extends Del {
 		$zipfile='assets/images/zip/'.$required_array['filename'];
 		$this->load->library('unzip');
    		$this->unzip->allow(array('jpeg', 'jpg'));
-   		$this->unzip->extract($zipfile, 'assets/images/tmp/');
-   		$season_products=$this->tbl_product->select('product_id,product_name')->get_many_by('season_id',$season_id);
+   		$b_path='assets/images/tmp/'.$required_array['filename'];
+   		if(!file_exists($b_path))
+   		{
+   			mkdir($b_path, 0777, true);
+   		}
+   		$this->unzip->extract($zipfile, $b_path);
+   		$season_products=$this->tbl_product->select('product_id,product_name')->get_many_by('is_active',true);
+   		$success=array();
    		foreach ($season_products as $product) {
-   			$c_path='assets/images/tmp/'.$product->product_name;
+   			$c_path=$b_path.'/'.$product->product_name;
    			$product_id=$product->product_id;
-   			$real_path='assets/images/tmp/'.$product->product_name.'/';
+   			$real_path=$b_path.'/'.$product->product_name.'/';
    			if(file_exists($c_path))
    			{
    				$files=$this->checkFilesInFolder($real_path);
    				if(!empty($files))
    				{
+   					$success[]=$product->product_name;
    					foreach ($files as $index => $filename) {
-   						$c_filename=$real_path.$filename;
-       					$imageupload = \Cloudinary\Uploader::upload($c_filename);
-			            $img[]=$imageupload;
-			            $str=explode('upload/', $imageupload['secure_url']);
-			            $inp['doc_path']=$str[1];
-			            $inp['is_active']=true;
-			           	$this->documents->insert($inp);
-						$document_id=$this->db->insert_id();
-						//insert in to lnk table
-						$inp1['document_id']=$document_id;
-						$inp1['product_id']=$product_id;
-						$this->lnk_produt_to_docs->insert($inp1);
-			            unlink($c_filename);
+   						if($filename!="Thumbs.db")
+   						{
+	   						$c_filename=$real_path.$filename;
+	       					$imageupload = \Cloudinary\Uploader::upload($c_filename);
+				            $img[]=$imageupload;
+				            $str=explode('upload/', $imageupload['secure_url']);
+				            $inp['doc_path']=$str[1];
+				            $inp['is_active']=true;
+				           	$this->documents->insert($inp);
+							$document_id=$this->db->insert_id();
+							//insert in to lnk table
+							$inp1['document_id']=$document_id;
+							$inp1['product_id']=$product_id;
+							$this->lnk_produt_to_docs->insert($inp1);
+				            unlink($c_filename);
+			        	}
 		            }
 		            rmdir($c_path);
    				}
    			}
    		}
-   		//rmdir("./assets/images/tmp");
-   		$this->session->set_flashdata('success',  'Zip file Imported successfully');
+   		$files=$failed=$this->checkFilesInFolder($b_path);
+   		if(!empty($files))
+		{
+			foreach ($files as $index => $filename) {
+				$dir=$b_path.'/'.$filename;
+				$this->deleteDirectory($dir);
+			}
+		}
+   		rmdir($b_path);
+   		$this->session->set_flashdata('successProduct',$success);
+   		$this->session->set_flashdata('failedProduct',$failed);
 		redirect('admin/season');
+	}
+
+	public function  deleteDirectory($dir) {
+	    if (!file_exists($dir)) {
+	        return true;
+	    }
+	    if (!is_dir($dir)) {
+	        return unlink($dir);
+	    }
+	    foreach (scandir($dir) as $item) {
+	        if ($item == '.' || $item == '..') {
+	            continue;
+	        }
+	        if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+	            return false;
+	        }
+	    }
+	    return rmdir($dir);
 	}
 
 	public function upload_season_zip()
@@ -925,6 +984,17 @@ class Admin extends Del {
 		$data['season_list']=$this->ref_season->get_all();
 		$data['page']='Collection List';
 		$view = 'admin/collection/admin_collection_list_view';
+		echo Modules::run('template/admin_template', $view, $data);	
+	}
+
+	public function collection_list1(){
+		$data['collection_list']=$this->ref_coll->get_all();
+		$data['brands_list']=$this->ref_brand->get_all();
+		$data['catagory_list']=$this->ref_cat->get_all();
+		$data['season_list']=$this->ref_season->get_all();
+		$data['product_list']=$this->tbl_product->get_all_product();
+		$data['page']='Collection List';
+		$view = 'admin/collection/admin_collection_list_new_view';
 		echo Modules::run('template/admin_template', $view, $data);	
 	}
 
@@ -1213,3 +1283,5 @@ class Admin extends Del {
 
 	}
 }
+
+

@@ -60,11 +60,19 @@ textarea {
     </div>
     <div class="page-content container-fluid">
         <div class="panel-body">
-            <?php if($this->session->flashdata('error')) { ?>
-            <p class="alert alert-danger"><?php echo $this->session->flashdata('error'); ?></p>
+            <?php if($this->session->flashdata('successProduct')) { ?>
+            <label class="badge-md badge-outline badge-success">Product uploaded successfully  </label>:
+                <?php foreach ($this->session->flashdata('successProduct') as $key => $value) { ?>
+                    <span class="badge badge-success"><?php echo $value; ?></span>&nbsp;&nbsp;
+                <?php } ?>
+                <br><br>
             <?php } ?>
-            <?php if($this->session->flashdata('success')) { ?>
-                <p class="alert alert-success"><?php echo $this->session->flashdata('success'); ?></p>
+            <?php if($this->session->flashdata('failedProduct')) { ?>
+            <label class="badge-md badge-outline badge-danger">Product Failed to process  </label>:
+                <?php foreach ($this->session->flashdata('failedProduct') as $key => $value) { ?>
+                    <span class="badge badge-danger"><?php echo $value; ?></span>&nbsp;&nbsp;
+                <?php } ?>
+                <br><br>
             <?php } ?>
             <a href="<?php echo base_url('admin/manage_season/');?>" id="add_season" class="btn btn-success btnadd" role="button">Add new season</a>
             <table id="collection_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">

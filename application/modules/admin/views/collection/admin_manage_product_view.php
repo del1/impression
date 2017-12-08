@@ -141,8 +141,9 @@ textarea {
                                     <span class="btn btn-sm btn-success fileinput-button">
                                     <i class="fa fa-plus"></i>
                                     <span>Add files...</span>
-                                    <input id="uploadImage" type="file" name="userfile[]" accept="image/x-png,image/gif,image/jpeg" multiple>
+                                    <input id="uploadImage" type="file" name="userfile[]" accept="image/x-png,image/gif,image/jpeg" onchange="javascript:updateList()" multiple>
                                 </span>
+                                <div id="fileList"></div>
                                 </div>
                             </div>
                             <?php if(isset($product_images_list) && !empty($product_images_list)){ ?>
@@ -197,6 +198,16 @@ textarea {
                     toastr[toastr_type](str);*/
             });
         });
+updateList = function() {
+  var input = document.getElementById('uploadImage');
+  var output = document.getElementById('fileList');
+
+  output.innerHTML = '<ul>';
+  for (var i = 0; i < input.files.length; ++i) {
+    output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+  }
+  output.innerHTML += '</ul>';
+}
 </script>
 
 

@@ -25,6 +25,7 @@
     jQuery(document).ready(function($) {
         var table=$("#product_list").DataTable( {
             "order": [[ 0, "asc" ]],
+            'info': false,
             stateSave: true,
             responsive: true,
         })

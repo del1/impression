@@ -84,8 +84,9 @@ textarea {
                                     <span class="btn btn-sm btn-success fileinput-button">
                                     <i class="fa fa-plus"></i>
                                     <span>Add data file...</span>
-                                    <input id="uploadCsv" type="file" name="userfile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                                    <input id="uploadCsv" type="file" onchange="javascript:updateList()" name="userfile" accept="text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                                 </span>
+                                <div id="fileList"></div>
                                 </div>
                             </div>
                             <div class=""><!-- col-md-9 offset-md-3 -->
@@ -129,6 +130,17 @@ textarea {
                 function(data, textStatus, xhr) {
             });
         });
+
+updateList = function() {
+  var input = document.getElementById('uploadCsv');
+  var output = document.getElementById('fileList');
+
+  output.innerHTML = '<ul>';
+  for (var i = 0; i < input.files.length; ++i) {
+    output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+  }
+  output.innerHTML += '</ul>';
+}
 </script>
 
 
