@@ -33,7 +33,6 @@ textarea {
     font-size: 17px;
     padding: 0px 8px;   
 }
-
 .pullRight{
     float: right;
 }
@@ -118,8 +117,6 @@ textarea {
         </div>
     </div>
 </div>
-
-
 <script type="text/javascript">
             $(".checkBoxChange").change(function(event) {
             var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
@@ -130,11 +127,9 @@ textarea {
                 function(data, textStatus, xhr) {
             });
         });
-
 updateList = function() {
   var input = document.getElementById('uploadCsv');
   var output = document.getElementById('fileList');
-
   output.innerHTML = '<ul>';
   for (var i = 0; i < input.files.length; ++i) {
     output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
@@ -142,5 +137,3 @@ updateList = function() {
   output.innerHTML += '</ul>';
 }
 </script>
-
-

@@ -1,5 +1,4 @@
 <!-- Page -->
-
 <style type="text/css">
     .btnadd{
         margin-left: 28px;
@@ -48,7 +47,6 @@
         </div>
     </div>
 </div>
-
 <!-- End Page -->
 <script type="text/javascript">
     jQuery(document).ready(function($) {
@@ -68,7 +66,6 @@
         $("#store_list_table_length").append($("#manage_product"));
         $("#store_list_table_filter").prepend($("#stylelist"));
         
-
         $(".switch").change(function(event) {
             var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
             csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";

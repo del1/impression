@@ -633,13 +633,19 @@ class Admin extends Del {
 	public function manage_season($season_id='')
 	{
 		$data['season_details']='';
-		if($season_id)
+		if(isset($season_id) && strlen(trim($season_id)))
 		{
 			$data['season_details']=$this->ref_season->get($season_id);
 		}
 		$data['page']='Season details';
-		$view = 'admin/collection/season/manage_season_view';
-		echo Modules::run('template/admin_template', $view, $data);	
+
+		if (!$this->input->is_ajax_request()) {
+			$view = 'admin/collection/season/manage_season_view';
+			echo Modules::run('template/admin_template', $view, $data);	
+		}else{
+			$view = 'admin/collection/ajax/admin_manage_data_view';
+			$this->load->view($view,$data);
+		}
 	}
 
 	public function upload_season()
@@ -651,8 +657,11 @@ class Admin extends Del {
 			$this->ref_season->update($posted_data['season_id'], $required_array);
 			$product_id=$posted_data['season_id'];
 		}else{
-			$this->ref_season->insert($required_array);
-			$product_id=$this->db->insert_id();//story_id aka product_id
+			if(isset($required_array['season']) && strlen(trim($required_array['season'])))
+			{
+				$this->ref_season->insert($required_array);
+				$product_id=$this->db->insert_id();//story_id aka product_id
+			}
 		}
 
 		if(isset($_FILES['userfile']) && strlen(trim($_FILES['userfile']['name'])))

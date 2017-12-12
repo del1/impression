@@ -37,7 +37,6 @@
         font-size: 17px;
         padding: 0px 8px;   
     }
-
     .pullRight{
         float: right;
     }
@@ -46,9 +45,7 @@
 textarea {
     resize: none;
 }
-
 </style>
-
 <div class="page">
     <div class="page-header">
         <h1 class="page-title">Season list</h1>
@@ -98,7 +95,6 @@ textarea {
         </div>
     </div>
 </div>
-
 <div class="modal modal-transparent modal-fullscreen fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -135,7 +131,6 @@ textarea {
         </div>
     </div>
 </div>
-
 <!-- End Page -->
 <script type="text/javascript">
     jQuery(document).ready(function($) {
@@ -154,7 +149,6 @@ textarea {
                 });
             }
         })
-
         $("#collection_table_length").append($("#add_season"));
     });
 </script>

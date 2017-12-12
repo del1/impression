@@ -2,7 +2,6 @@
     foreach ($sub_catlist as $subcat) { 
         $subcat_array[$subcat->cat_id][]=$subcat;
     } 
-
     //for selected subcat in select2 plugin
     $subcat_id_array=array();
     if(isset($product_subcat_list) && !empty($product_subcat_list))
@@ -47,7 +46,7 @@
         <div class="form-group row">
             <label for="Season" class ="form-control-label col-sm-3 col-xl-2">Season</label>
             <div class="col-sm-9 col-xl-10">
-                <select class="form-control"  data-plugin="select2" for="Season" name="season_id">
+                <select class="form-control select2p" data-placeholder="Select Season" for="Season" name="season_id">
                     <?php foreach ($season_list as $season) { ?>
                         <option <?php if(isset($product_details->season_id) && $product_details->season_id==$season->season_id){ echo "selected"; } ?> value="<?php echo $season->season_id;  ?>"><?php echo $season->season;  ?></option>
                     <?php } ?>
@@ -58,23 +57,20 @@
         <div class="form-group row">
             <label for="Season" class ="form-control-label col-sm-3 col-xl-2"><?php echo $catagory->cat_name; ?></label>
             <div class="col-sm-9 col-xl-10">
-                <select class="form-control" data-placeholder="Select catagories of <?php echo $catagory->cat_name; ?>" for="sub catagories for <?php echo $catagory->cat_name; ?>" multiple data-plugin="select2" name="sub_cat_id[]">
+                <select class="form-control select2p" data-placeholder="Select catagories of <?php echo $catagory->cat_name; ?>" for="sub catagories for <?php echo $catagory->cat_name; ?>" multiple name="sub_cat_id[]">
                     <?php foreach ($subcat_array[$catagory->cat_id] as $subcat) { ?>
                         <option <?php if(in_array($subcat->sub_cat_id,$subcat_id_array)) { echo "selected"; } ;?>  value="<?php echo $subcat->sub_cat_id;  ?>"><?php echo $subcat->sub_cat_name;  ?></option>
                     <?php } ?>
                 </select>
             </div>
         </div>
-
         <?php } ?>
-
         <div class="form-group row">
             <label for="Store Address" class ="form-control-label col-sm-3 col-xl-2">Product Description</label>
             <div class="col-sm-9 col-xl-10">
                 <textarea name="product_desc" placeholder="Add product address" class="form-control" style="height: 102px;"><?php if(isset($product_details->product_desc) && strlen(trim($product_details->product_desc))) {  echo html_escape($product_details->product_desc); } ?></textarea>
             </div>
         </div>
-
         <div class="form-group row">
             <label for="Store Address" class ="form-control-label col-sm-3 col-xl-2">Upload Style Images</label>
             <div class="col-sm-9 col-xl-10">
@@ -97,7 +93,6 @@
                 <div class="icondemo lefticonWrap">
                     <input type="checkbox" data-pk="document_id" data-type="documents" class="checkBoxChange" <?php if($image['is_active']=="true"){ echo "checked"; } ?> data-id="<?php echo $image['document_id']; ?>">
                 </div>
-
             </div>
             <?php } ?>
         </div>
@@ -110,13 +105,22 @@
 </div>
 <script type="text/javascript">
     updateList = function() {
-  var input = document.getElementById('uploadImage');
-  var output = document.getElementById('fileList');
-
-  output.innerHTML = '<ul>';
-  for (var i = 0; i < input.files.length; ++i) {
-    output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
-  }
-  output.innerHTML += '</ul>';
-}
+        var input = document.getElementById('uploadImage');
+        var output = document.getElementById('fileList');
+        output.innerHTML = '<ul>';
+        for (var i = 0; i < input.files.length; ++i) {
+            output.innerHTML += '<li>' + input.files.item(i).name + '</li>';
+            }
+            output.innerHTML += '</ul>';
+        }
+    jQuery(document).ready(function($) {
+        $(".select2p").select2({
+              placeholder: $(this).data('placeholder')
+        });
+        /*$(".select2p").each(function(element){
+            $(this).select2({
+              placeholder: $(this).data('placeholder')
+            });
+        })*/
+    });
 </script>

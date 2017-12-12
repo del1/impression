@@ -23,7 +23,6 @@
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <h3>Collection List</h3>
                     <!-- <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn btn-danger">Upload season data</a> -->
-
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12 text-right">
                     <a href="<?php echo base_url('admin/season'); ?>" class="btn btn-danger">Manage Season's</a>
@@ -52,7 +51,6 @@
                 </tbody>
             </table>
         </div>
-
         <div class="panel-body">
             <div class="row">
                 <div class="col-md-12 col-sm-12 col-xs-12">
@@ -102,7 +100,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal modal-transparent modal-fullscreen fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -139,7 +136,6 @@
         </div>
     </div>
 </div>
-
 <!-- End Page -->
 <script type="text/javascript">
     jQuery(document).ready(function($) {
@@ -158,7 +154,6 @@
                 });
             }
         })
-
         var table1=$("#brand_table").DataTable( {
             "order": [[ 0, "asc" ]],
             "bAutoWidth": true,
@@ -173,7 +168,6 @@
                 });
             }
         })
-
         $("#brand_table_length").append($("#add_brand"));
     
     
@@ -200,7 +194,6 @@
             });
         });
     });
-
     $(".fav").click(function(event) { 
         var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
         csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";

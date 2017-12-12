@@ -3,7 +3,6 @@
 <!-- Page -->
 <style type="text/css">
     @media (min-width: 768px) and (max-width: 991px){
-        
     }
     .btnadd{
         margin-left: 28px;
@@ -19,106 +18,137 @@
     </div>
     <div class="page-content container-fluid">
         <div class="panel-body">
- 
-           <div class="col-xl-12">
+            <div class="col-xl-12">
               <!-- Example Tabs -->
-              <div class="example-wrap">
-                <div class="nav-tabs-horizontal" data-plugin="tabs">
-                  <ul class="nav nav-tabs" role="tablist">
-                    <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#allstyle"
-                      aria-controls="allstyle" role="tab">All styles</a></li>
-                    <li class="nav-item fav" role="presentation"><a class="nav-link" data-toggle="tab" href="#popularview"
-                      aria-controls="popularview" role="tab">View Popular</a></li>
-                    <li class="nav-item addnew" role="presentation"><a class="nav-link" data-toggle="tab" href="#addnew"
-                      aria-controls="addnew" role="tab">Add New</a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#bulkimport" aria-controls="bulkimport" role="tab">Bulk Import</a></li>
-                      <li class="nav-item" role="presentation"><a class="nav-link" data-toggle="tab" href="#Download"
-                      aria-controls="Download" role="tab">Download</a></li>
-                    
-                  </ul>
-                  <div class="tab-content pt-20">
-                    <div class="tab-pane active" id="allstyle" role="tabpanel">
-                        <?php $this->load->view('admin/collection/ajax/product/ajax_admin_all_product_list'); ?>
+                <div class="example-wrap">
+                    <div class="nav-tabs-horizontal" data-plugin="tabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item" role="presentation"><a class="nav-link active" data-toggle="tab" href="#allstyle"
+                              aria-controls="allstyle" role="tab">All styles</a></li>
+                            <li class="nav-item viewPopular" role="presentation"><a class="nav-link" data-toggle="tab" href="#popularview"
+                              aria-controls="popularview" role="tab">View Popular</a></li>
+                            <li class="nav-item addnew" role="presentation"><a class="nav-link" data-toggle="tab" href="#addnew"
+                              aria-controls="addnew" role="tab">Add New</a></li>
+                            <li class="nav-item dataimport" role="presentation"><a class="nav-link" data-toggle="tab" href="#bulkimport" aria-controls="bulkimport" role="tab">Bulk Import</a></li>
+                              <li class="nav-item" role="presentation"><a class="nav-link btnright" href="<?php echo base_url('admin/exportStyleList'); ?>" role="button">Download</a></li>
+                        </ul>
+                        <div class="tab-content pt-20">
+                            <div class="tab-pane active" id="allstyle" role="tabpanel">
+                                <?php $this->load->view('admin/collection/ajax/product/ajax_admin_all_product_list'); ?>
+                            </div>
+                            <div class="tab-pane" id="popularview" role="tabpanel">
+                             
+                            </div>
+                            <div class="tab-pane" id="addnew" role="tabpanel">
+                             
+                            </div>
+                            <div class="tab-pane" id="bulkimport" role="tabpanel">
+                            </div>
+                            <div class="tab-pane" id="Download" role="tabpanel">
+                              
+                            </div>
+                        </div>
                     </div>
-                    <div class="tab-pane" id="popularview" role="tabpanel">
-                     
-                    </div>
-                    <div class="tab-pane" id="addnew" role="tabpanel">
-                     
-                    </div>
-                    <div class="tab-pane" id="bulkimport" role="tabpanel">
-                     
-                    </div>
-                    <div class="tab-pane" id="Download" role="tabpanel">
-                      
-                    </div>
-                  </div>
                 </div>
-              </div>
               <!-- End Example Tabs -->
             </div>
 
-          <div class="row">
+
+            <div class="col-xl-12">
+              <!-- Example Tabs -->
+                <div class="example-wrap">
+                    <div class="nav-tabs-horizontal" data-plugin="tabs">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item list2" role="presentation" data-target="collectionlist"><a class="nav-link active" data-toggle="tab" href="#collectionlist" aria-controls="collectionlist" role="tab">Collections</a></li>
+                            <li class="nav-item list2" role="presentation" data-target="brandlist"><a class="nav-link" data-toggle="tab" href="#brandlist" aria-controls="brandlist" role="tab">Brands</a></li>
+                            <li class="nav-item list2" role="presentation" data-target="seasonlist"><a class="nav-link" data-toggle="tab" href="#seasonlist" aria-controls="seasonlist" role="tab">Season's</a></li>
+                        </ul>
+                        <div class="tab-content pt-20">
+                            <div class="tab-pane active" id="collectionlist" role="tabpanel">
+                                <table id="collection_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Collection Number</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                           <!-- <th>Action</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($collection_list as $collection) { ?>
+                                        <tr>
+                                            <td><?php echo $collection->collection_id; ?></td>
+                                            <td><?php echo $collection->collection_name; ?></td>
+                                            <td><input type="checkbox" data-id="<?php echo $collection->collection_id; ?>" data-pk="collection_id" data-type="ref_coll" class="switch-collection" <?php if($collection->is_active=='true'){echo 'checked';} ?> /></td>
+                                            <!-- <td><a href="<?php //echo base_url('admin/manage_collection/'.$collection->collection_id);?>" class="btn btn-primary" role="button">Manage</a> -->
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="brandlist" role="tabpanel">
+                               <a role="button" href="<?php echo base_url('admin/manage_brand'); ?>" id="add_brand" class="btn btn-primary btnadd">Add Brand</a>
+                                <table id="brand_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive" >
+                                    <thead>
+                                        <tr>
+                                            <th>Brand Number</th>
+                                            <th>Brand Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($brands_list as $brand) { ?>
+                                        <tr>
+                                            <td><?php echo $brand->brand_id; ?></td>
+                                            <td><?php echo $brand->brand_name; ?></td>
+                                            <td><input type="checkbox" data-id="<?php echo $brand->brand_id; ?>" data-pk="brand_id" data-type="ref_brand" class="switch-brands" <?php if($brand->is_active=='true'){echo 'checked';} ?> /></td>
+                                            <td><a  href="<?php echo base_url('admin/manage_brand/'.$brand->brand_id);?>" class="btn btn-primary" role="button">Manage</a></td>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tab-pane" id="seasonlist" role="tabpanel">
+                               <a href="<?php echo base_url('admin/manage_season/');?>" id="add_season" class="btn btn-success btnadd" role="button">Add new season</a>
+                                <table id="season_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
+                                    <thead>
+                                        <tr>
+                                            <th>Season Id</th>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($season_list as $season) { ?>
+                                        <tr>
+                                            <td><?php echo $season->season_id; ?></td>
+                                            <td><?php echo $season->season; ?></td>
+                                            <td><input type="checkbox" data-id="<?php echo $season->season_id; ?>" data-pk="season_id" data-type="ref_season" class="switch" <?php if($season->is_active=='true'){echo 'checked';} ?> /></td>
+                                            <td><a href="<?php echo base_url('admin/manage_season/'.$season->season_id);?>" class="btn btn-primary" role="button">Manage</a>
+                                        </tr>
+                                    <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              <!-- End Example Tabs -->
+            </div>
+            <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                     <h3>Collection List</h3>
                     <!-- <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn btn-danger">Upload season data</a> -->
-
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-12 text-right">
                     <a href="<?php echo base_url('admin/season'); ?>" class="btn btn-danger">Manage Season's</a>
-                    <a href="#" data-toggle="modal" data-target="#modal" class="btn btn-warning fav">View Popular styles</a>
+                    <a href="#" data-toggle="modal" data-target="#modal" class="btn btn-warning viewPopular">View Popular styles</a>
                     <a href="<?php echo base_url('admin/all_products/');?>" class="btn btn-success" role="button">View All Style List</a>
                 </div>
             </div>
-            <table id="collection_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
-                <thead>
-                    <tr>
-                        <th>Collection Number</th>
-                        <th>Name</th>
-                        <th>Status</th>
-                       <!-- <th>Action</th> -->
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($collection_list as $collection) { ?>
-                    <tr>
-                        <td><?php echo $collection->collection_id; ?></td>
-                        <td><?php echo $collection->collection_name; ?></td>
-                        <td><input type="checkbox" data-id="<?php echo $collection->collection_id; ?>" data-pk="collection_id" data-type="ref_coll" class="switch-collection" <?php if($collection->is_active=='true'){echo 'checked';} ?> /></td>
-                        <!-- <td><a href="<?php //echo base_url('admin/manage_collection/'.$collection->collection_id);?>" class="btn btn-primary" role="button">Manage</a> -->
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
-        </div>
 
-        <div class="panel-body">
-            <div class="row">
-                <div class="col-md-12 col-sm-12 col-xs-12">
-                    <h3>Brands List</h3>
-                </div>
-            </div>
-            <a role="button" href="<?php echo base_url('admin/manage_brand'); ?>" id="add_brand" class="btn btn-primary btnadd">Add Brand</a>
-            <table id="brand_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive" >
-                <thead>
-                    <tr>
-                        <th>Brand Number</th>
-                        <th>Brand Name</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php foreach ($brands_list as $brand) { ?>
-                    <tr>
-                        <td><?php echo $brand->brand_id; ?></td>
-                        <td><?php echo $brand->brand_name; ?></td>
-                        <td><input type="checkbox" data-id="<?php echo $brand->brand_id; ?>" data-pk="brand_id" data-type="ref_brand" class="switch-brands" <?php if($brand->is_active=='true'){echo 'checked';} ?> /></td>
-                        <td><a  href="<?php echo base_url('admin/manage_brand/'.$brand->brand_id);?>" class="btn btn-primary" role="button">Manage</a></td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
         </div>
     </div>
 </div>
@@ -131,7 +161,6 @@
                 </div>
                 <div class="modal-body">
                     <div class="row row-centered" id="targetBody">
-                       
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -141,7 +170,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal modal-transparent modal-fullscreen fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -178,10 +206,21 @@
         </div>
     </div>
 </div>
-
 <!-- End Page -->
 <script type="text/javascript">
     jQuery(document).ready(function($) {
+
+        $(document).on('click', '.list2', function(event) {
+            //event.preventDefault();
+            $(".list2").removeClass('active');
+            var id=$(this).data("target");
+            console.log(id);
+            $("#"+id).addClass('active');
+        });
+
+
+
+
         var table=$("#collection_table").DataTable( {
             "order": [[ 0, "asc" ]],
             "bAutoWidth": true,
@@ -197,7 +236,6 @@
                 });
             }
         })
-
         var table1=$("#brand_table").DataTable( {
             "order": [[ 0, "asc" ]],
             "bAutoWidth": true,
@@ -212,8 +250,25 @@
                 });
             }
         })
-
         $("#brand_table_length").append($("#add_brand"));
+
+
+        var table=$("#season_table").DataTable( {
+            "order": [[ 0, "asc" ]],
+            "bAutoWidth": true,
+            stateSave: true,
+            responsive: true,
+            'info': false,
+            "fnDrawCallback": function(e) {
+                var elems = Array.prototype.slice.call(document.querySelectorAll('.switch'));
+                elems.forEach(function(elem) {
+                    if(!elem.hasAttribute("data-switchery")){
+                        var switchery = new Switchery(elem,{color: '#3aa99e',secondaryColor: '#FF0000'});    
+                    }
+                });
+            }
+        })
+        $("#season_table_length").append($("#add_season"));
     
     
     $(".switch-collection,.switch-brands").change(function(event) {
@@ -239,24 +294,37 @@
             });
         });
     });
-
-    $(".fav").click(function(event) { 
+    $(".viewPopular").click(function(event) { 
         var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
         csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
         var data={[csrfName]:csrfHash};
         $.post("<?php echo base_url('admin/mostFavourites') ?>", data, 
             function(data, textStatus, xhr) {
+                $(".tab-pane").removeClass('active');
+                $("#popularview").addClass('active');
                 $("#popularview").html(data);
         });
     });
-
     $(".addnew").click(function(event) { 
         var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
         csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
         var data={[csrfName]:csrfHash};
         $.post("<?php echo base_url('admin/manage_product') ?>", data, 
             function(data, textStatus, xhr) {
+                $(".tab-pane").removeClass('active');
+                $("#addnew").addClass('active');
                 $("#addnew").html(data);
+        });
+    });
+    $(".dataimport").click(function(event) { 
+        var csrfName = "<?php echo $this->security->get_csrf_token_name(); ?>",
+        csrfHash = "<?php echo $this->security->get_csrf_hash(); ?>";
+        var data={[csrfName]:csrfHash};
+        $.post("<?php echo base_url('admin/manage_season') ?>", data, 
+            function(data, textStatus, xhr) {
+                $(".tab-pane").removeClass('active');
+                $("#bulkimport").addClass('active');
+                $("#bulkimport").html(data);
         });
     });
 </script>
