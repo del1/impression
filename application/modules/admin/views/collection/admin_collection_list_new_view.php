@@ -20,6 +20,16 @@
         <div class="panel-body">
             <div class="col-xl-12">
               <!-- Example Tabs -->
+
+            <!-- <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 text-right">
+                    <a href="<?php // echo base_url('admin/season'); ?>" class="btn btn-danger">Manage Season's</a>
+                    <a href="#" data-toggle="modal" data-target="#modal" class="btn btn-warning viewPopular">View Popular styles</a>
+                    <a href="<?php // echo base_url('admin/all_products/');?>" class="btn btn-success" role="button">View All Style List</a>
+                </div>
+            </div> -->
                 <div class="example-wrap">
                     <div class="nav-tabs-horizontal" data-plugin="tabs">
                         <ul class="nav nav-tabs" role="tablist">
@@ -64,7 +74,7 @@
                             <li class="nav-item list2" role="presentation" data-target="seasonlist"><a class="nav-link" data-toggle="tab" href="#seasonlist" aria-controls="seasonlist" role="tab">Season's</a></li>
                         </ul>
                         <div class="tab-content pt-20">
-                            <div class="tab-pane active" id="collectionlist" role="tabpanel">
+                            <div class="tab-pane active list1" id="collectionlist" role="tabpanel">
                                 <table id="collection_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
                                     <thead>
                                         <tr>
@@ -86,7 +96,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="tab-pane" id="brandlist" role="tabpanel">
+                            <div class="tab-pane list1" id="brandlist" role="tabpanel">
                                <a role="button" href="<?php echo base_url('admin/manage_brand'); ?>" id="add_brand" class="btn btn-primary btnadd">Add Brand</a>
                                 <table id="brand_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive" >
                                     <thead>
@@ -109,8 +119,8 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="tab-pane" id="seasonlist" role="tabpanel">
-                               <a href="<?php echo base_url('admin/manage_season/');?>" id="add_season" class="btn btn-success btnadd" role="button">Add new season</a>
+                            <div class="tab-pane list1" id="seasonlist" role="tabpanel">
+                               <a href="<?php echo base_url('admin/manage_season/');?>" id="add_season" class="btn btn-primary btnadd" role="button">Add new season</a>
                                 <table id="season_table" class="table table-hover dataTable table-striped w-full table-bordered table-responsive">
                                     <thead>
                                         <tr>
@@ -137,18 +147,6 @@
                 </div>
               <!-- End Example Tabs -->
             </div>
-            <div class="row">
-                <div class="col-md-6 col-sm-6 col-xs-12">
-                    <h3>Collection List</h3>
-                    <!-- <a href="#" data-toggle="modal" data-target="#modalUpload" class="btn btn-danger">Upload season data</a> -->
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-12 text-right">
-                    <a href="<?php echo base_url('admin/season'); ?>" class="btn btn-danger">Manage Season's</a>
-                    <a href="#" data-toggle="modal" data-target="#modal" class="btn btn-warning viewPopular">View Popular styles</a>
-                    <a href="<?php echo base_url('admin/all_products/');?>" class="btn btn-success" role="button">View All Style List</a>
-                </div>
-            </div>
-
         </div>
     </div>
 </div>
@@ -212,7 +210,7 @@
 
         $(document).on('click', '.list2', function(event) {
             //event.preventDefault();
-            $(".list2").removeClass('active');
+            $(".list1").removeClass('active');
             var id=$(this).data("target");
             console.log(id);
             $("#"+id).addClass('active');
