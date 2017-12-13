@@ -1,5 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+require_once APPPATH . '/third_party/Mailgun/Mailgun.php';
+use Mailgun\Mailgun;
+
 class Impression extends Del {
 	public $data='';
 	public function __construct() 
@@ -473,6 +476,17 @@ class Impression extends Del {
 		$data='';
 		$view = 'impression/share_story';
 		echo Modules::run('template/impression_Template', $view, $data);	
+	}
+
+	public function testmailgun(){
+		$mg = Mailgun::create('key-89695bfb57ed06df44661e3229576604');
+		$mg->messages()->send('example.com', [
+		  'from'    => 'msakore@gmail.com',
+		  'to'      => 'mahesh.sakore@connexistech.com',
+		  'subject' => 'The PHP SDK is awesome!',
+		  'text'    => 'It is so simple to send a message.'
+		]);
+		
 	}
 	public function testmail(){
 	    $this->load->library('mailgun');
